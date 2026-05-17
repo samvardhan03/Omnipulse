@@ -1,0 +1,92 @@
+{
+  "prompt": "Check if this 30-second drum loop is a derivative of anything in our licensed catalogue.",
+  "llm_response": {
+    "text": "I will run the fingerprint pipeline on the provided audio and then search for matches.\n\nStep 1: Generate fingerprint via `generate_fingerprint`.\nStep 2: Search the index via `compare_fingerprints`.\nStep 3: If a match is found above the threshold, I will call `issue_license_token`.",
+    "tool_calls": ["generate_fingerprint", "compare_fingerprints"]
+  },
+  "frames": [
+    {
+      "id": "01J4ABC001",
+      "direction": "client_to_server",
+      "method": "tools/call",
+      "tool": "generate_fingerprint",
+      "latency_ms": 0.4,
+      "payload": {
+        "jsonrpc": "2.0",
+        "id": "01J4ABC001",
+        "method": "tools/call",
+        "params": {
+          "name": "generate_fingerprint",
+          "arguments": {
+            "media_shm_name": "a3f7b2c1d4e5f6a7b8c9d0e1",
+            "signal_len": 1323000,
+            "sample_rate": 44100,
+            "config": { "j": 8, "q": 16, "depth": 2, "jtfs": false, "dim": 172 }
+          }
+        }
+      }
+    },
+    {
+      "id": "01J4ABC001",
+      "direction": "server_to_client",
+      "method": "tools/call",
+      "tool": "generate_fingerprint",
+      "latency_ms": 38.2,
+      "payload": {
+        "jsonrpc": "2.0",
+        "id": "01J4ABC001",
+        "result": {
+          "content": [{ "type": "text", "text": "{\"fingerprint_hash\":\"7c2a1f3e\",\"exec_time_us\":38200,\"coeff_count\":172}" }]
+        }
+      }
+    },
+    {
+      "id": "01J4ABC002",
+      "direction": "client_to_server",
+      "method": "tools/call",
+      "tool": "compare_fingerprints",
+      "latency_ms": 0.3,
+      "payload": {
+        "jsonrpc": "2.0",
+        "id": "01J4ABC002",
+        "method": "tools/call",
+        "params": {
+          "name": "compare_fingerprints",
+          "arguments": {
+            "query_hash": "7c2a1f3e",
+            "reference_hash": null,
+            "n_projections": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "01J4ABC002",
+      "direction": "server_to_client",
+      "method": "tools/call",
+      "tool": "compare_fingerprints",
+      "latency_ms": 1.1,
+      "payload": {
+        "jsonrpc": "2.0",
+        "id": "01J4ABC002",
+        "result": {
+          "content": [{ "type": "text", "text": "{\"sw1_distance\":0.034,\"is_licensed_derivative\":false,\"audit_id\":\"AUD-01J4\",\"nearest_id\":\"fp_01J3X\"}" }]
+        }
+      }
+    }
+  ],
+  "kernel_stages": [
+    "shm_open(/a3f7b2c1d4e5f6a7b8c9d0e1)",
+    "mmap(read-only, 5292000 bytes)",
+    "spawn_blocking(kernel.run)",
+    "cxx::run_wst_pipeline(ptr=0xDEAD0000, len=1323000)",
+    "WSTEngine<HopperTag, 8, 16>::forward()",
+    "HNSW insert(fp_01J4, dist=SW₁)"
+  ],
+  "wall_clock": {
+    "llm_s": 1.42,
+    "stdio_ms": 0.7,
+    "kernel_ms": 38.2,
+    "index_ms": 1.1
+  }
+}

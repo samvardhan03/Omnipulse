@@ -1,0 +1,28 @@
+# Rust build artifacts
+**/target/
+**/*.pdb
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/.venv/
+**/venv/
+**/*.egg-info/
+**/dist/
+**/build/
+
+# Node / Next.js
+site/node_modules/
+site/.next/
+site/out/
+site/.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+**/.env
+**/.env.local
+**/secrets.*
