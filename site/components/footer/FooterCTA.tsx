@@ -18,6 +18,13 @@ export default function FooterCTA() {
           </p>
           <div className="flex flex-wrap gap-4">
             <a
+              href={process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform"}
+              className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
+              style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+            >
+              Open the platform
+            </a>
+            <a
               href="https://github.com/samvardhan03/Omnipulse"
               className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
               style={{ borderColor: "var(--ink)", color: "var(--ink)" }}

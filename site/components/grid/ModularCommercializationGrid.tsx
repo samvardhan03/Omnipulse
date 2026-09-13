@@ -47,6 +47,7 @@ export const TIERS = [
     externalLabel: "Talk to founders",
     deepdiveHref: "/tiers/enterprise",
     commercial: true,
+    requestAccess: true,
   },
 ] as const;
 
@@ -258,6 +259,21 @@ export default function ModularCommercializationGrid() {
                   >
                     → Know how it works
                   </span>
+
+                  {"requestAccess" in tier && tier.requestAccess && (
+                    <span
+                      className="font-mono text-[12px] uppercase tracking-[0.12em] px-4 py-2 border transition-opacity hover:opacity-70 inline-block w-fit"
+                      style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const url = process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform";
+                        window.location.href = `${url}/request-access`;
+                      }}
+                    >
+                      Request access
+                    </span>
+                  )}
 
                   {/* Secondary — external link */}
                   <span

@@ -1,0 +1,40 @@
+name: site
+
+on:
+  push:
+    branches: [main, "chore/**", "feat/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Lint
+        working-directory: site
+        run: npm run lint
+
+      - name: Build
+        working-directory: site
+        env:
+          NEXT_PUBLIC_PLATFORM_URL: ${{ secrets.NEXT_PUBLIC_PLATFORM_URL }}
+        run: npm run build
+
+  secrets-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check no secrets or private artifacts
+        run: bash scripts/check_no_secrets.sh

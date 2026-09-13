@@ -48,9 +48,16 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
             >
               <a
-                href="#interactive"
+                href={process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform"}
                 className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
                 style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+              >
+                Start free
+              </a>
+              <a
+                href="#interactive"
+                className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
+                style={{ borderColor: "var(--ink)", color: "var(--ink)" }}
               >
                 See it work
               </a>

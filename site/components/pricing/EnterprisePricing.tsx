@@ -98,6 +98,13 @@ export default function EnterprisePricing() {
             </span>
           </div>
           <a
+            href={`${process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform"}/request-access`}
+            className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
+            style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+          >
+            Request access
+          </a>
+          <a
             href="mailto:shekhawatsamvardhan@gmail.com"
             className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
             style={{ borderColor: "var(--ink)", color: "var(--ink)" }}
