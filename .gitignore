@@ -39,3 +39,14 @@ Ethics-and-AI/
 ldpc/ldpc_h_tables.h
 ldpc/ldpc_h_tables.npy
 ldpc/ldpc_digest.txt
+
+# Tombstone guards — content migrated to samvardhan03/vikshep-engine
+dataplane-contrib/
+pilot/
+
+# Private engine monorepo and local tooling -- never committed to public repo.
+omnipulse-engine/
+omni lock/
+.claude/*.md
+claude/
+.pytest_cache/
