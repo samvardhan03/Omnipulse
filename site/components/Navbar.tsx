@@ -51,6 +51,13 @@ export default function Navbar() {
           >
             Docs ↗
           </a>
+          <a
+            href={process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform"}
+            className="font-mono text-[12px] uppercase tracking-[0.12em] px-4 py-2 border transition-opacity hover:opacity-70"
+            style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+          >
+            Sign in
+          </a>
         </div>
       </div>
     </header>
