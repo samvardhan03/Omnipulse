@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Eyebrow from "@/components/primitives/Eyebrow";
+import { CONTACT_EMAIL, PLATFORM_URL } from "@/lib/links";
 
 export const TIERS = [
   {
@@ -18,7 +19,7 @@ export const TIERS = [
   {
     phase: "II",
     title: "Phase II: High-Velocity Concurrent Processing",
-    sub: "The vector substrate. omni-hnsw + sliced-wasserstein Rust crates for sub-millisecond nearest-neighbour over billion-scale fingerprint catalogues. AGPL-3.0 + Commercial.",
+    sub: "The vector substrate. omni-hnsw + sliced-wasserstein Rust crates for fast nearest-neighbour over large-scale fingerprint catalogues. AGPL-3.0 + Commercial.",
     how: "Passive across all modalities, small catalogue.",
     pkg: "cargo add vector-index sliced-wasserstein",
     externalHref: "https://crates.io/crates/vector-index",
@@ -267,8 +268,8 @@ export default function ModularCommercializationGrid() {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        const url = process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform";
-                        window.location.href = `${url}/request-access`;
+                        const url = PLATFORM_URL ?? `mailto:${CONTACT_EMAIL}?subject=OmniPulse%20access%20request`;
+                        window.location.href = url;
                       }}
                     >
                       Request access

@@ -1,9 +1,10 @@
 import Eyebrow from "@/components/primitives/Eyebrow";
+import { CONTACT_EMAIL, GITHUB_URL, getStartedCta } from "@/lib/links";
 
-export default function TwoLayerContactSection() {
+export default function ContactSection() {
   return (
     <section id="contact" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="max-w-[1280px] mx-auto px-6 py-16">
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 md:col-span-8 flex flex-col gap-6">
             <Eyebrow>Pilot program</Eyebrow>
@@ -19,11 +20,11 @@ export default function TwoLayerContactSection() {
               You bring a catalogue or an output stream; we bring the registry,
               the embedding, and the verification procedure. Honest engineering,
               no black boxes, and we will tell you what is measured versus what
-              is still a budget.
+              is still a goal.
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="mailto:shekhawatsamvardhan@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="font-mono text-[14px] uppercase tracking-[0.12em] px-8 py-4 border transition-opacity hover:opacity-70"
                 style={{
                   borderColor: "var(--ink)",
@@ -33,16 +34,34 @@ export default function TwoLayerContactSection() {
               >
                 Start the conversation
               </a>
+              <a
+                href={getStartedCta.href}
+                className="font-mono text-[14px] uppercase tracking-[0.12em] px-8 py-4 border transition-opacity hover:opacity-70"
+                style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
+              >
+                {getStartedCta.label}
+              </a>
             </div>
             <p className="font-mono text-[12px]" style={{ color: "var(--ink-mute)" }}>
-              Or reach us directly at{" "}
+              Or reach us at{" "}
               <a
-                href="mailto:shekhawatsamvardhan@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="transition-opacity hover:opacity-60"
                 style={{ color: "var(--ink)" }}
               >
-                shekhawatsamvardhan@gmail.com
+                {CONTACT_EMAIL}
               </a>
+              {" "}or browse the{" "}
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-60"
+                style={{ color: "var(--ink)" }}
+              >
+                source on GitHub
+              </a>
+              . Core is AGPL-3.0 + Commercial.
             </p>
           </div>
 

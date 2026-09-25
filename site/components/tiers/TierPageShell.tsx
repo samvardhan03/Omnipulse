@@ -55,7 +55,7 @@ export default function TierPageShell({
       {/* Back nav */}
       <div className="max-w-[1280px] mx-auto px-6 pt-8 pb-4">
         <Link
-          href="/#platform"
+          href="/how-it-works#platform"
           className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
           style={{ color: "var(--ink-mute)" }}
         >

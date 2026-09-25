@@ -88,7 +88,7 @@ export default function TwoLayerSynthIdGrid() {
 
         <div className="mt-6 text-right">
           <a
-            href="#contact"
+            href="/#contact"
             className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
             style={{ color: "var(--ink-mute)" }}
           >

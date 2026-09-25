@@ -446,10 +446,10 @@ export default function OmniLockEmbedSimulator() {
               style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
             >
               Demo runs entirely in your browser with a demonstration key.
-              Production embedding runs on our GPU backend.
+              Production embedding runs server-side.
             </div>
             <a
-              href="#contact"
+              href="/#contact"
               className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
               style={{ color: "var(--ink-mute)" }}
             >

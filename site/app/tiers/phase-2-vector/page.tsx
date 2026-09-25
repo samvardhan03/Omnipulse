@@ -5,7 +5,7 @@ import HnswGraphExplorer from "@/components/tiers/phase-2/HnswGraphExplorer";
 
 export const metadata = {
   title: "Phase II: Vector Substrate · OmniPulse",
-  description: "Billion-scale nearest neighbour over distributions, in Rust. Concurrent HNSW + Sliced-Wasserstein.",
+  description: "Concurrent nearest neighbour over distributions, in Rust. HNSW + Sliced-Wasserstein for large-scale fingerprint catalogues.",
 };
 
 export default function Phase2Page() {
@@ -15,8 +15,8 @@ export default function Phase2Page() {
       <TierPageShell
         phase="II"
         tierName="High-Velocity Concurrent Processing Tier"
-        headline="Billion-scale nearest neighbour over distributions, in Rust."
-        sub="Concurrent HNSW with a pluggable distance metric: and the first production-ready Sliced-Wasserstein implementation that composes cleanly with HNSW. AGPL-3.0 + Commercial."
+        headline="Concurrent nearest neighbour over distributions, in Rust."
+        sub="Concurrent HNSW with a pluggable distance metric: the first production-ready Sliced-Wasserstein implementation that composes cleanly with HNSW. AGPL-3.0 + Commercial."
         diagram={<HnswGraphExplorer />}
         whatYouGet={[
           "vector-index: generic ConcurrentHnsw<P, M> over a parking_lot::RwLock-backed index.",
@@ -25,7 +25,7 @@ export default function Phase2Page() {
         ]}
         whatItSolves={[
           "Cosine and L2 collapse semantically rich fingerprints; SW₁ preserves distributional structure.",
-          "HNSW gives you sub-millisecond k-NN. Compose the two for a billion-scale, distributionally-aware index.",
+          "HNSW gives you fast k-NN. Compose the two for a large-scale, distributionally-aware index.",
         ]}
         pricingNote="AGPL-3.0: free for research & open source"
         enterpriseUseCases={[

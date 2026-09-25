@@ -22,9 +22,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OmniPulse: Compliance & IP Infrastructure for the Generative Media Era",
+  title: "OmniPulse: Media Provenance and Rights Infrastructure",
   description:
-    "A wavelet-scattering fingerprint plane that identifies, attributes, and licenses synthetic and human-authored media in under 40 ms: on-prem, GPU-accelerated, MCP-native.",
+    "A wavelet-scattering fingerprint plane that identifies and attributes synthetic and human-authored media. Audio and image fingerprinting on CPU. Ed25519-signed attestations. AGPL-3.0 + Commercial.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
