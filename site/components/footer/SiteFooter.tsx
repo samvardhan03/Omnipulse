@@ -4,16 +4,14 @@ const NAV_COLS = [
   {
     title: "Product",
     links: [
-      { label: "Platform", href: "/#simulator" },
-      { label: "Tiers", href: "/#platform" },
+      { label: "How it works", href: "/how-it-works" },
+      { label: "Progress", href: "/progress" },
       { label: "Pricing", href: "/licensing" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Docs ↗", href: "https://github.com/samvardhan03/Omnipulse/#readme" },
-      { label: "Changelog", href: "#" },
       { label: "GitHub ↗", href: "https://github.com/samvardhan03/Omnipulse" },
     ],
   },
