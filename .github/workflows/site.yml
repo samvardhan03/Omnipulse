@@ -5,6 +5,9 @@ on:
     branches: [main, "chore/**", "feat/**"]
   pull_request:
     branches: [main]
+  schedule:
+    # Weekly external-link check every Monday at 07:00 UTC
+    - cron: "0 7 * * 1"
 
 jobs:
   build:
@@ -29,7 +32,82 @@ jobs:
         working-directory: site
         env:
           NEXT_PUBLIC_PLATFORM_URL: ${{ secrets.NEXT_PUBLIC_PLATFORM_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
         run: npm run build
+
+  # Blocking: internal link check runs on every push/PR.
+  # Starts Next.js in production mode and checks every route in the sitemap.
+  check-links-internal:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Build
+        working-directory: site
+        env:
+          NEXT_PUBLIC_PLATFORM_URL: ${{ secrets.NEXT_PUBLIC_PLATFORM_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+        run: npm run build
+
+      - name: Start server and check internal links
+        working-directory: site
+        run: |
+          npm run start &
+          SERVER_PID=$!
+          # Wait until the server is accepting connections
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:3000/ > /dev/null 2>&1 && break
+            sleep 1
+          done
+          SITE_URL=http://localhost:3000 CHECK_EXTERNAL=false node scripts/check-links.mjs
+          kill $SERVER_PID
+
+  # Non-blocking: external link check runs on a weekly schedule only.
+  check-links-external:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Build
+        working-directory: site
+        env:
+          NEXT_PUBLIC_PLATFORM_URL: ${{ secrets.NEXT_PUBLIC_PLATFORM_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+        run: npm run build
+
+      - name: Start server and check all links (external non-blocking)
+        working-directory: site
+        run: |
+          npm run start &
+          SERVER_PID=$!
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:3000/ > /dev/null 2>&1 && break
+            sleep 1
+          done
+          SITE_URL=http://localhost:3000 CHECK_EXTERNAL=true node scripts/check-links.mjs || true
+          kill $SERVER_PID
 
   secrets-guard:
     runs-on: ubuntu-latest
