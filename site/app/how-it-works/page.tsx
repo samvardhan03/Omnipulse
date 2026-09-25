@@ -1,12 +1,36 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import SiteFooter from "@/components/footer/SiteFooter";
-import TwoLayerMergerSection from "@/components/TwoLayerMergerSection";
 import TwoLayerSynthIdGrid from "@/components/TwoLayerSynthIdGrid";
-import OmniLockEmbedSimulator from "@/components/OmniLockEmbedSimulator";
-import InteractiveSimulator from "@/components/simulator/InteractiveSimulator";
 import ModularCommercializationGrid from "@/components/grid/ModularCommercializationGrid";
 import Eyebrow from "@/components/primitives/Eyebrow";
 import Link from "next/link";
+
+function Placeholder({ label }: { label: string }) {
+  return (
+    <div
+      className="max-w-[1280px] mx-auto px-6 py-12"
+      style={{ borderBottom: "1px solid var(--rule)" }}
+    >
+      <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--ink-mute)" }}>
+        Loading {label}...
+      </p>
+    </div>
+  );
+}
+
+const TwoLayerMergerSection = dynamic(
+  () => import("@/components/TwoLayerMergerSection"),
+  { ssr: false, loading: () => <Placeholder label="two-layer diagram" /> }
+);
+const OmniLockEmbedSimulator = dynamic(
+  () => import("@/components/OmniLockEmbedSimulator"),
+  { ssr: false, loading: () => <Placeholder label="embed simulator" /> }
+);
+const InteractiveSimulator = dynamic(
+  () => import("@/components/simulator/InteractiveSimulator"),
+  { ssr: false, loading: () => <Placeholder label="pipeline simulator" /> }
+);
 
 export const metadata = {
   title: "How it works",
