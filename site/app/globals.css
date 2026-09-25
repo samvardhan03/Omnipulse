@@ -9,10 +9,12 @@
   --ink-mute: #4A4A52;
   --rule: rgba(27, 27, 31, 0.12);
   --accent: #1B1B1F;
-  --signal-warm: #C2461F;
+  --signal-warm: #C0401E; /* darkened from #C2461F: 4.71:1 on --bg, was 4.49:1 (failed AA) */
   --accent-cyan: transparent;
-  --accent-teal: #2A9D8F;
+  --accent-teal: #1B7A6E; /* darkened from #2A9D8F: 4.64:1 on --bg, was 2.98:1 (failed AA) */
   --glow: none;
+  --focus-ring: 2px solid #C0401E;
+  --focus-offset: 2px;
 }
 
 * {
@@ -60,6 +62,34 @@ section {
   section {
     padding: 56px 0;
   }
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+  border-radius: 1px;
+}
+
+/* Skip-to-content link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 1rem;
+  z-index: 9999;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 1rem;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* ReactFlow overrides */

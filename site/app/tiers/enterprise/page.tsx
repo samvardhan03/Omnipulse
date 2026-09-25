@@ -4,8 +4,10 @@ import TierPageShell from "@/components/tiers/TierPageShell";
 import AutoscalerSimulator from "@/components/tiers/enterprise/AutoscalerSimulator";
 
 export const metadata = {
-  title: "Enterprise: SaaS Pipeline · OmniPulse",
-  description: "Multi-tenant, autoscaled, audit-ready. The complete cloud-native deployment.",
+  title: "Enterprise SaaS Pipeline",
+  description:
+    "Multi-tenant, autoscaled deployment with write-once audit trail and Ed25519-signed tokens. On-prem option. Contract pricing.",
+  alternates: { canonical: "./" },
 };
 
 export default function EnterprisePage() {

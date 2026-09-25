@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,10 +22,30 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://omnipulseid.vercel.app";
+
 export const metadata: Metadata = {
-  title: "OmniPulse: Media Provenance and Rights Infrastructure",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "OmniPulse",
+    template: "%s | OmniPulse",
+  },
   description:
-    "A wavelet-scattering fingerprint plane that identifies and attributes synthetic and human-authored media. Audio and image fingerprinting on CPU. Ed25519-signed attestations. AGPL-3.0 + Commercial.",
+    "Wavelet-scattering fingerprint for audio and images. Register media, find copies, prove ownership. Ed25519-signed attestations. Private beta.",
+  openGraph: {
+    type: "website",
+    siteName: "OmniPulse",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBF1E6" },
+    { media: "(prefers-color-scheme: dark)", color: "#1B1B1F" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,7 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-theme="light"
       className={`${inter.variable} ${sourceSerif.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

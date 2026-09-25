@@ -4,8 +4,10 @@ import TierPageShell from "@/components/tiers/TierPageShell";
 import HnswGraphExplorer from "@/components/tiers/phase-2/HnswGraphExplorer";
 
 export const metadata = {
-  title: "Phase II: Vector Substrate · OmniPulse",
-  description: "Concurrent nearest neighbour over distributions, in Rust. HNSW + Sliced-Wasserstein for large-scale fingerprint catalogues.",
+  title: "Phase II: Vector Substrate",
+  description:
+    "Concurrent HNSW with Sliced-Wasserstein distance metric. Fast nearest-neighbour over large-scale fingerprint catalogues. AGPL-3.0.",
+  alternates: { canonical: "./" },
 };
 
 export default function Phase2Page() {

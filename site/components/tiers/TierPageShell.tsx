@@ -51,7 +51,7 @@ export default function TierPageShell({
   secondaryCta,
 }: TierContent) {
   return (
-    <div className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Back nav */}
       <div className="max-w-[1280px] mx-auto px-6 pt-8 pb-4">
         <Link
@@ -212,6 +212,6 @@ export default function TierPageShell({
           Talk to founders →
         </a>
       </div>
-    </div>
+    </main>
   );
 }

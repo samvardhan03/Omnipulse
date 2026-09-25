@@ -4,16 +4,17 @@ import HairlineRule from "@/components/primitives/HairlineRule";
 import SiteFooter from "@/components/footer/SiteFooter";
 
 export const metadata = {
-  title: "Licensing: OmniPulse",
+  title: "Licensing",
   description:
-    "AGPL-3.0 + Commercial: the OmniPulse dual-licensing model.",
+    "AGPL-3.0 plus Commercial: the OmniPulse dual-licensing model. Open source for research, commercial for production use.",
+  alternates: { canonical: "./" },
 };
 
 export default function LicensingPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-[1280px] px-6 pt-28 pb-24">
+      <main id="main-content" className="mx-auto max-w-[1280px] px-6 pt-28 pb-24">
         <p
           className="font-mono text-[11px] uppercase tracking-[0.18em]"
           style={{ color: "var(--ink-mute)" }}
