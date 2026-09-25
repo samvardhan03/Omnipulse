@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import Eyebrow from "@/components/primitives/Eyebrow";
 import HairlineRule from "@/components/primitives/HairlineRule";
 import HeroEmbedLoop from "@/components/HeroEmbedLoop";
+import { primaryCta } from "@/lib/links";
 
 export default function HeroSection() {
   return (
     <section id="hero" className="pt-[128px] pb-[96px]" style={{ borderBottom: "1px solid var(--rule)" }}>
       <div className="max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-12 gap-6 items-center">
-          {/* Left: 7-col editorial block */}
           <div className="col-span-12 md:col-span-7 flex flex-col gap-6">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -27,7 +27,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
             >
-              Provenance that lives inside the pixels.
+              Register once. Find every copy.
             </motion.h1>
 
             <motion.p
@@ -41,6 +41,17 @@ export default function HeroSection() {
               every derivative after, and a record that belongs to you.
             </motion.p>
 
+            <motion.p
+              className="font-mono text-[12px] leading-[1.6] max-w-[560px]"
+              style={{ color: "var(--ink-mute)" }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
+            >
+              Fingerprinting of audio and images is built and tested. The OmniLock active
+              watermark is in research. The platform is in private beta.
+            </motion.p>
+
             <motion.div
               className="flex flex-wrap gap-4 pt-2"
               initial={{ opacity: 0, y: 12 }}
@@ -48,30 +59,22 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
             >
               <a
-                href={process.env.NEXT_PUBLIC_PLATFORM_URL ?? "#platform"}
+                href={primaryCta.href}
                 className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
                 style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
               >
-                Start free
+                {primaryCta.label}
               </a>
               <a
-                href="#interactive"
+                href="/how-it-works"
                 className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
                 style={{ borderColor: "var(--ink)", color: "var(--ink)" }}
               >
-                See it work
-              </a>
-              <a
-                href="#contact"
-                className="font-mono text-[13px] uppercase tracking-[0.12em] px-6 py-3 border transition-opacity hover:opacity-70"
-                style={{ borderColor: "var(--ink)", color: "var(--ink)" }}
-              >
-                Talk to us
+                See how it works
               </a>
             </motion.div>
           </div>
 
-          {/* Right: 5-col animation */}
           <motion.div
             className="col-span-12 md:col-span-5 flex flex-col justify-center"
             initial={{ opacity: 0, x: 16 }}
