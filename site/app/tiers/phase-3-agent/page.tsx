@@ -4,8 +4,10 @@ import TierPageShell from "@/components/tiers/TierPageShell";
 import PromptRouterStepper from "@/components/tiers/phase-3/PromptRouterStepper";
 
 export const metadata = {
-  title: "Phase III: Autonomous Agentic Control · OmniPulse",
-  description: "Claude, wired into a real GPU pipeline over stdio. MCP-native control plane.",
+  title: "Phase III: Agentic Control",
+  description:
+    "MCP server and agentic control plane. Routes operator requests to the Rust orchestrator over JSON-RPC 2.0. AGPL-3.0 plus Commercial.",
+  alternates: { canonical: "./" },
 };
 
 export default function Phase3Page() {

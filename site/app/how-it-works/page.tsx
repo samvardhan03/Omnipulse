@@ -9,9 +9,10 @@ import Eyebrow from "@/components/primitives/Eyebrow";
 import Link from "next/link";
 
 export const metadata = {
-  title: "How it works · OmniPulse",
+  title: "How it works",
   description:
-    "A full technical walkthrough of OmniPulse: the two-layer architecture, scattering fingerprints, OmniLock watermark, verdicts, signed attestations, and the four deployment tiers.",
+    "Two-engine architecture, scattering fingerprints, OmniLock watermark, verdicts, and signed attestations. Full technical walkthrough.",
+  alternates: { canonical: "./" },
 };
 
 function VerdictsSection() {
@@ -172,7 +173,7 @@ export default function HowItWorksPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-[64px]">
+      <main id="main-content" className="pt-[64px]">
         <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-8">
           <Eyebrow>Technical walkthrough</Eyebrow>
           <h1

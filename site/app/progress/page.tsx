@@ -5,8 +5,10 @@ import { STATUS, STATE_LABELS, STATE_ORDER, STATE_COLORS, type ItemState } from 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Progress · OmniPulse",
-  description: "Current build status of the OmniPulse platform. Private beta.",
+  title: "Progress",
+  description:
+    "Current build status of the OmniPulse platform. Audio and image fingerprinting built. Product screens in development. Private beta.",
+  alternates: { canonical: "./" },
 };
 
 function StateSection({ state }: { state: ItemState }) {
@@ -60,7 +62,7 @@ export default function ProgressPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-[64px]">
+      <main id="main-content" className="pt-[64px]">
         <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-16">
           <div className="flex flex-col gap-3 mb-12">
             <Eyebrow>Platform status</Eyebrow>

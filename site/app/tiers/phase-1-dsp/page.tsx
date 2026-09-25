@@ -4,8 +4,10 @@ import TierPageShell from "@/components/tiers/TierPageShell";
 import FilterBankExplorer from "@/components/tiers/phase-1/FilterBankExplorer";
 
 export const metadata = {
-  title: "Phase I: DSP Primitives · OmniPulse",
-  description: "Wavelet scattering, shipped as a wheel. C++/CUDA primitives for audio, vibration, and biosignal pipelines.",
+  title: "Phase I: DSP Primitives",
+  description:
+    "Wavelet scattering as a Python wheel. C++/CUDA Morlet scattering for audio and image fingerprinting on CPU. AGPL-3.0 plus Commercial.",
+  alternates: { canonical: "./" },
 };
 
 export default function Phase1Page() {
