@@ -1,5 +1,5 @@
 import Eyebrow from "@/components/primitives/Eyebrow";
-import { FOUNDERS, COAUTHORED_NOTE } from "./founders.data";
+import { FOUNDERS } from "./founders.data";
 
 export default function FoundersCreatorsBios() {
   return (
@@ -17,110 +17,91 @@ export default function FoundersCreatorsBios() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FOUNDERS.map((f) => (
-            <div key={f.name}>
-              <div
-                className="border flex flex-col gap-5 h-full"
-                style={{ borderColor: "var(--rule)", padding: 32 }}
-              >
-                <div className="flex flex-col gap-1">
-                  <p
-                    className="font-mono text-[11px] uppercase tracking-[0.18em]"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    {f.eyebrow}
-                  </p>
-                  <h3
-                    className="font-serif font-light text-[28px] leading-tight"
-                    style={{ color: "var(--ink)" }}
-                  >
-                    {f.name}
-                  </h3>
-                  <p className="text-[14px]" style={{ color: "var(--ink-mute)" }}>
-                    {f.role}
-                  </p>
-                </div>
+            <div
+              key={f.name}
+              className="border flex flex-col gap-5 p-8"
+              style={{ borderColor: "var(--rule)" }}
+            >
+              <div className="flex flex-col gap-1">
+                <p
+                  className="font-mono text-[11px] uppercase tracking-[0.18em]"
+                  style={{ color: "var(--accent)" }}
+                >
+                  {f.eyebrow}
+                </p>
+                <h3
+                  className="font-serif font-light text-[28px] leading-tight"
+                  style={{ color: "var(--ink)" }}
+                >
+                  {f.name}
+                </h3>
+              </div>
 
-                <p className="text-[15px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+              <div className="flex flex-col gap-2">
+                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink)" }}>
+                  {f.role}
+                </p>
+                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
                   {f.focus}
                 </p>
+                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+                  {f.maintainsLinks.length > 0 ? (
+                    <>
+                      Maintains{" "}
+                      {f.maintainsLinks.map((m, i) => (
+                        <span key={m.label}>
+                          <a
+                            href={m.href}
+                            className="transition-opacity hover:opacity-70"
+                            style={{ color: "var(--ink)" }}
+                          >
+                            <code className="font-mono text-[13px]">{m.label}</code>
+                          </a>
+                          {i < f.maintainsLinks.length - 1 ? ", " : "."}
+                        </span>
+                      ))}
+                    </>
+                  ) : (
+                    f.maintains
+                  )}
+                </p>
+              </div>
 
-                <div className="flex flex-col gap-1">
-                  {f.portfolio && (
-                    <a
-                      href={f.portfolio}
-                      className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      {f.portfolio.replace("https://", "")}
-                    </a>
-                  )}
-                  {f.linkedin && (
-                    <a
-                      href={f.linkedin}
-                      className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      {f.linkedin.replace("https://", "")}
-                    </a>
-                  )}
-                  {"github" in f && f.github && (
-                    <a
-                      href={f.github as string}
-                      className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      {(f.github as string).replace("https://", "")}
-                    </a>
-                  )}
-                  {"email" in f && f.email && (
-                    <a
-                      href={`mailto:${f.email}`}
-                      className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      email: {f.email}
-                    </a>
-                  )}
-                </div>
-
-                <div
-                  className="pt-4 border-t flex flex-col gap-2"
-                  style={{ borderColor: "var(--rule)" }}
-                >
-                  <p
-                    className="font-mono text-[11px] uppercase tracking-[0.12em]"
+              <div className="flex flex-col gap-1 pt-2">
+                {f.portfolio && (
+                  <a
+                    href={f.portfolio}
+                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
                     style={{ color: "var(--ink-mute)" }}
                   >
-                    Maintains
-                  </p>
-                  {f.maintains.map((m) => (
-                    <a
-                      key={m.label}
-                      href={m.href}
-                      className="flex items-baseline gap-3 transition-opacity hover:opacity-70"
-                    >
-                      <code
-                        className="font-mono text-[13px]"
-                        style={{ color: "var(--ink)" }}
-                      >
-                        {m.label}
-                      </code>
-                      <span
-                        className="font-mono text-[11px]"
-                        style={{ color: "var(--ink-mute)" }}
-                      >
-                        - {m.note}
-                      </span>
-                    </a>
-                  ))}
-                </div>
+                    {f.portfolio.replace("https://", "")}
+                  </a>
+                )}
+                {f.linkedin && (
+                  <a
+                    href={f.linkedin}
+                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
+                    style={{ color: "var(--ink-mute)" }}
+                  >
+                    {f.linkedin.replace("https://", "")}
+                  </a>
+                )}
+                {f.github && (
+                  <a
+                    href={f.github}
+                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
+                    style={{ color: "var(--ink-mute)" }}
+                  >
+                    {f.github.replace("https://", "")}
+                  </a>
+                )}
               </div>
             </div>
           ))}
         </div>
 
         <aside
-          className="col-span-12 mt-4 border-t pt-6 font-mono text-[13px]"
+          className="mt-4 border-t pt-6 font-mono text-[13px]"
           style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
         >
           Co-authored:{" "}
