@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+target/
+*.so
+.DS_Store
+Cargo.lock

@@ -1,0 +1,34 @@
+[package]
+name         = "omni-metal-sys"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description  = "Metal (WST/cxx family) backend for the OmniPulse WST scattering cascade."
+
+[features]
+default = []
+# Compiles the Objective-C++ host layer, the Metal Shading Language shaders,
+# and links Metal + Foundation. Only meaningful on macOS. On any other target
+# the build script becomes a no-op and the Rust side reports the backend as
+# unavailable.
+metal = []
+# Adds a small set of test-only entry points that let integration tests
+# poison output buffers with a sentinel bit pattern and force-skip the
+# Managed-storage synchronizeResource: barrier. Used by the stale-read guard
+# in crates/omni-backend/tests/parity_cpu_vs_metal.rs. Off in release builds.
+debug-hooks = []
+
+[dependencies]
+cxx        = "1.0"
+thiserror  = { workspace = true }
+tracing    = { workspace = true }
+
+[build-dependencies]
+cxx-build = "1.0"
+sha2      = { workspace = true }
+hex       = { workspace = true }
+
+[dev-dependencies]
+approx = { workspace = true }

@@ -1,0 +1,33 @@
+[package]
+name = "omni-wst-sys"
+version = "0.1.0"
+edition = "2021"
+description = "Zero-copy CXX FFI bindings to the omni-wst-core CUDA pipeline for the Phase 2 Rust orchestrator"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/samvardhan03/Module-I-omni-wst-core"
+keywords = ["cuda", "ffi", "wavelet", "scattering", "signal-processing"]
+categories = ["external-ffi-bindings", "science"]
+links = "omni_wst_bridge"
+
+[lib]
+name = "omni_wst_sys"
+crate-type = ["lib"]
+
+# ---------------------------------------------------------------------------
+# Runtime dependencies
+# ---------------------------------------------------------------------------
+[dependencies]
+# cxx provides the #[cxx::bridge] macro and the generated C++ glue
+cxx = "1.0"
+
+# ---------------------------------------------------------------------------
+# Build dependencies — used by build.rs
+# ---------------------------------------------------------------------------
+[build-dependencies]
+# cxx-build drives the C++ compilation of the bridge glue code
+cxx-build = "1.0"
+# cmake locates and drives the CMake build of libomni_wst_bridge.so
+cmake  = "0.1"
+
+[dev-dependencies]
+# Used in integration tests only
