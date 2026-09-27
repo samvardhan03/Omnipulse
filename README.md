@@ -2,9 +2,9 @@
 
 Media provenance infrastructure for creators and rights organizations.
 
-OmniPulse pairs two complementary verification layers on a shared CUDA/Rust/Python substrate:
+OmniPulse pairs two verification layers on a shared C++/Rust substrate:
 
-- **OmniPulse (passive):** deterministic wavelet-scattering fingerprint -- matches any
+- **OmniPulse (passive):** deterministic wavelet-scattering fingerprint. Matches any
   derivative without cooperation at creation. Fixed-operator mathematics; no trained model
   on the verify path.
 - **OmniLock (active):** cryptographically signed 64-bit LDPC watermark embedded at
@@ -18,65 +18,134 @@ Both layers write to the same signed ledger. The verdict is a closed enum:
 
 ---
 
-## Repositories
+## Engine
 
-| Repo | Visibility | Contents |
+### What is open and what is not
+
+**Open (this repository):**
+
+| Path | Contents |
+|---|---|
+| `engine/wst/` | C++/CUDA WST scattering cascade, Morlet filter bank, JTFS kernel, Python wheel |
+| `crates/omni-ffi/` | cxx bridge from Rust to the C++ engine (FFI family 1) |
+| `crates/omni-backend/` | Rust compute seam: CPU, Metal, and CUDA backend traits |
+| `crates/omni-metal-sys/` | Metal (MSL) WST backend; runtime or offline shader compilation |
+| `scripts/metal/` | Metal device probe and parity scripts |
+| `crates/omnipulse-fp/` | `omnipulse-fp` CLI: decode two audio files and print SW1 distance |
+
+**Not open:**
+
+- The platform: registration, attestation service, billing, dashboard (private engine repo)
+- OmniLock embed/decode pipeline, the LDPC parity-check matrix H, trained Mixer weights
+- The attestation signing key and calibrated match thresholds
+
+### Backends
+
+| Backend | Status | Notes |
 |---|---|---|
-| [samvardhan03/Omnipulse](https://github.com/samvardhan03/Omnipulse) (this repo) | Public | Marketing site (Next.js), contributing guide, license |
-| samvardhan03/omnipulse-engine | Private | Full engine monorepo: all Rust crates, C++/CUDA kernels, Python OmniLock, platform infra |
-| [samvardhan03/Module-1.1-omni-ffi](https://github.com/samvardhan03/Module-1.1-omni-ffi) | Public | cxx bridge for WST audio (FFI family 1); canonical copy in engine, exported here |
-| [samvardhan03/Module-I-omni-wst-core](https://github.com/samvardhan03/Module-I-omni-wst-core) | Public | C++/CUDA WSTEngine, Morlet bank, Python wheel; canonical copy in engine, exported here |
-| [samvardhan03/omnipulse-rs](https://github.com/samvardhan03/omnipulse-rs) | Public | Rust workspace: omnipulse-mcp, vector-index, sliced-wasserstein; canonical copy in engine |
+| CPU | Reference implementation | Radix-2 Cooley-Tukey FFT + Morlet filter bank. Always available. |
+| Metal | Passes parity (max rel err < 1e-4) | Verified on AMD Radeon Pro 555 (Managed), Intel HD 630 (Shared), and Apple paravirtual GPU in CI. See measurements below. |
+| CUDA | Compile-only (3 of 5 .cu files) | Three standalone math kernels compile with nvcc 12.3. Two FFI binding files require external headers. No parity measured; kernels have not run. |
 
-The private engine repo (`omnipulse-engine`) vendors all open-source crates via `git subtree`.
-Public repos are one-way exports maintained by `scripts/export_public.sh`.
+### Metal vs CPU measurements
+
+Recorded on the development laptop (Intel MacBook Pro 2017, macOS 13.7.8, Command Line
+Tools only, shader_path=source). Every row is an actual run; none are budgets or
+expectations. See `docs/measurements/metal_vs_cpu.md` for the full provenance header.
+
+#### AMD Radeon Pro 555 (discrete, MTLStorageModeManaged), shader_path=source
+
+| Signal len (samples) | Iterations | CPU mean (ms) | Metal mean (ms) | Faster |
+|---|---|---|---|---|
+| 256 | 200 | 0.102 | 1.521 | cpu |
+| 1024 | 200 | 0.408 | 1.844 | cpu |
+| 4096 | 100 | 1.724 | 2.644 | cpu |
+| 16384 | 50 | 7.492 | 3.794 | metal |
+| 65536 | 20 | 31.806 | 10.509 | metal |
+
+#### Intel HD Graphics 630 (integrated, MTLStorageModeShared), shader_path=source
+
+| Signal len (samples) | Iterations | CPU mean (ms) | Metal mean (ms) | Faster |
+|---|---|---|---|---|
+| 256 | 200 | 0.099 | 1.837 | cpu |
+| 1024 | 200 | 0.402 | 1.963 | cpu |
+| 4096 | 100 | 1.790 | 2.514 | cpu |
+| 16384 | 50 | 7.487 | 4.012 | metal |
+| 65536 | 20 | 31.128 | 9.783 | metal |
+
+Metal is slower than CPU below ~4096 samples due to dispatch overhead and buffer
+synchronization. It becomes faster for longer signals (65k samples: ~3x on AMD,
+~3.2x on Intel iGPU).
+
+#### Apple silicon Mac mini
+
+Not measured. To be filled in when the friend validates Prompt M2.
+
+### CUDA
+
+The five `.cu` files in `engine/wst/cpp/` were compiled with nvcc 12.3 inside an
+`nvidia/cuda:12.3.1-devel-ubuntu22.04` container on the development laptop (Intel MacBook,
+Docker Desktop, no GPU on the build host).
+
+Three of five files compiled cleanly:
+
+| File | Result |
+|---|---|
+| `filter_bank.cu` | ok |
+| `memory_staging.cu` | ok |
+| `scatter.cu` | ok |
+| `wst_bindings.cu` | failed: `pybind11/pybind11.h` not found (Python binding; needs pybind11 installed) |
+| `wst_bridge.cu` | failed: `rust/cxx.h` not found (Rust cxx bridge; header generated by `cargo build`) |
+
+`wst_bindings.cu` and `wst_bridge.cu` are FFI binding files, not standalone math kernels.
+They compile correctly through their respective build systems. The three math kernels have
+no external dependencies beyond the CUDA toolkit.
+
+No GPU parity between CUDA and CPU has been measured. These kernels have not been run.
+`.github/workflows/engine.yml` includes a `cuda-compile-only` job that verifies the three
+standalone kernels compile on every push.
+
+### Quickstart
+
+Clone, build, and compare two audio files:
+
+```bash
+git clone https://github.com/samvardhan03/Omnipulse
+cd Omnipulse
+cargo build -p omnipulse-fp --release
+./target/release/omnipulse-fp file_a.wav file_b.flac
+```
+
+The tool prints `sw1_distance: <value>` followed by a disclaimer that the distance is
+not a verdict. The platform's calibrated thresholds are not public.
+
+To use the Metal backend on a Mac with a Metal-capable GPU:
+
+```bash
+cargo build -p omnipulse-fp --release --features metal
+OMNIPULSE_METAL_SHADERS=source ./target/release/omnipulse-fp file_a.wav file_b.flac --backend metal
+```
 
 ---
 
-## What is public and what is not
+## Repository layout
 
-**Rule:** fixed operators are public; trained artifacts and secrets are private.
-
-**Public (open-source repos above):**
-- All WST/JTFS kernels, Sliced-Wasserstein distance, HNSW nearest-neighbor
-- The cxx bridge (omni-ffi) and the hand-written OmniLock C-ABI v3 (omni-lock-core)
-- MCP orchestrator (omnipulse-mcp), Python control plane (omnipulse-agent)
-- This marketing site
-
-**Private (omnipulse-engine):**
-- Full omni-lock-embed package: embedder, extractor, decoder, Mixer architecture
-- Production LDPC parity-check matrix H and the seed-locked generator
-- Trained Mixer weights and training pipeline
-- Ed25519 issuer key and signed registry rows
-
-The active embed/decode path hard-exits at build and runtime if `OMNIPULSE_ENGINE_DIR`
-is unset. The passive fingerprint path has no such gate and builds from the public repos alone.
-
----
-
-## Status
-
-| Capability | Status | Note |
-|---|---|---|
-| Passive fingerprint (audio) | Implemented | WSTEngine, Morlet bank, HNSW, SW1 |
-| Passive fingerprint (image/video) | Implemented | Same kernel family, different input shape |
-| Active embed (OmniLock write path) | Implemented, not production-hardened | Requires engine artifacts; LDPC H seed production-locked in engine repo |
-| Active verify (OmniLock read path) | Implemented | Sum-Product decoder, parity check, Ed25519 verify |
-| Ed25519 registry ledger | Proposed | Infrastructure wired; issuer key not provisioned |
-| LDPC H matrix sync | Blocked | kernel_ldpc.cu (3,6) protograph vs Python (2,4) code mismatch; fix in Phase 5b on CUDA host |
-| Platform (auth, billing, dashboard) | In progress | P3-P9 of private platform plan |
-
----
-
-## Docs
-
-- [How OmniPulse works](docs/how-it-works.md) -- architecture, dual-FFI design, verdict enum, shm seam
+```
+crates/omni-ffi/          cxx bridge for the C++ WST engine
+crates/omni-backend/      CPU, Metal, and CUDA backend trait and impls
+crates/omni-metal-sys/    Metal (MSL) backend
+crates/omnipulse-fp/      compare CLI (omnipulse-fp binary)
+engine/wst/               C++/CUDA WST scattering engine, Morlet bank, Python wheel
+scripts/metal/            Metal device probe, list_devices, parity script
+docs/measurements/        Measured benchmarks (never budgets)
+site/                     Marketing website (Next.js, deployed to Vercel)
+```
 
 ---
 
 ## License
 
-AGPL-3.0 for open-source and research use. Commercial license for production
+AGPL-3.0-or-later for open-source and research use. Commercial license for production
 deployments that cannot comply with AGPL source-disclosure requirements.
 Contact shekhawatsamvardhan@gmail.com for commercial terms.
 
@@ -98,5 +167,10 @@ shreyanshjain05.vercel.app / github.com/shreyanshjain05
 ---
 
 ## Contributing
+
+Issues welcome. Pull requests require a contributor licence agreement before they can
+be merged; dual licensing means contributions need an explicit CLA signed by the
+contributor. Contact shekhawatsamvardhan@gmail.com if you want to discuss a
+contribution.
 
 See CONTRIBUTING.md.

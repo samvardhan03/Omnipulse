@@ -1,0 +1,38 @@
+[workspace]
+resolver = "2"
+
+# Exported WST engine crates and the omnipulse-fp compare CLI.
+# engine/wst has its own workspace.toml for standalone omni-wst-sys builds;
+# it is excluded here so cargo does not try to merge two [workspace] roots.
+exclude = ["engine/wst"]
+
+members = [
+    "crates/omni-ffi",
+    "crates/omni-backend",
+    "crates/omni-metal-sys",
+    "crates/omnipulse-fp",
+]
+
+[workspace.package]
+version      = "0.1.1"
+edition      = "2021"
+rust-version = "1.75"
+license      = "AGPL-3.0-or-later"
+repository   = "https://github.com/samvardhan03/Omnipulse"
+
+[workspace.dependencies]
+serde      = { version = "1.0", features = ["derive"] }
+thiserror  = "1.0"
+tracing    = "0.1"
+sha3       = "0.10"
+sha2       = "0.10"
+hex        = "0.4"
+approx     = "0.5"
+cxx        = "1.0"
+cxx-build  = "1.0"
+anyhow     = "1"
+
+[profile.release]
+lto            = "thin"
+codegen-units  = 1
+debug          = 1

@@ -1,0 +1,205 @@
+name: Engine CI
+
+# Tests the open-source WST engine crates.
+# Three jobs:
+#   linux-cpu  -- Linux x86_64, cargo build + cargo test for the CPU backend.
+#   macos-metal -- macOS Apple silicon (macos-latest runner), both shader paths.
+#   cuda-compile-only -- compile the CUDA .cu files inside nvidia/cuda devel
+#                        container; no GPU needed, no runtime tests.
+#
+# Leave site.yml untouched; this file covers the engine crates only.
+
+on:
+  push:
+    branches: ["main", "feat/**", "fix/**", "chore/**"]
+    paths:
+      - "crates/**"
+      - "engine/wst/**"
+      - "scripts/metal/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/engine.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "crates/**"
+      - "engine/wst/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+
+jobs:
+  # -------------------------------------------------------------------------
+  # Linux CPU build and tests
+  # -------------------------------------------------------------------------
+  linux-cpu:
+    name: Linux CPU build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo build (default features, CPU only)
+        run: cargo build -p omni-ffi -p omni-backend -p omnipulse-fp
+
+      - name: Cargo test (omni-backend, CPU)
+        run: cargo test -p omni-backend -- --nocapture
+
+      - name: Cargo test (omni-ffi)
+        run: cargo test -p omni-ffi
+
+  # -------------------------------------------------------------------------
+  # macOS Metal parity (adapted from the private engine macos.yml)
+  # macos-latest runs on Apple silicon which uses MTLStorageModeShared.
+  # Both shader paths are exercised (metallib and source).
+  # -------------------------------------------------------------------------
+  macos-metal:
+    name: macOS Metal parity (${{ matrix.shader_path }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shader_path: [metallib, source]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain and host devices
+        run: |
+          echo "== macOS version =="
+          sw_vers
+          echo
+          echo "== xcode-select =="
+          xcode-select -p
+          echo
+          echo "== metal toolchain =="
+          xcrun -sdk macosx --find metal   || echo "xcrun metal not found"
+          xcrun -sdk macosx --find metallib || echo "xcrun metallib not found"
+          echo
+          echo "== rustc / cargo =="
+          rustc --version
+          cargo --version
+          echo
+          echo "== MTLCopyAllDevices() =="
+          clang++ -std=c++17 -fobjc-arc -O2 scripts/metal/list_devices.mm \
+            -framework Metal -framework Foundation -o /tmp/metal-list-devices
+          devs=$(/tmp/metal-list-devices)
+          if [ -z "$devs" ]; then
+            echo "no Metal devices reported."
+            echo "gpu_tests_available=0" >> "$GITHUB_ENV"
+          else
+            echo "$devs"
+            echo "gpu_tests_available=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo build (metal feature, shader_path=${{ matrix.shader_path }})
+        env:
+          OMNIPULSE_METAL_SHADERS: ${{ matrix.shader_path }}
+        run: cargo build -p omni-metal-sys --features metal
+
+      - name: Cargo test (parity, shader_path=${{ matrix.shader_path }})
+        if: env.gpu_tests_available == '1'
+        env:
+          OMNIPULSE_METAL_SHADERS: ${{ matrix.shader_path }}
+        # --nocapture: prints the self-identifying header (storage mode, shader
+        # path, source hash) so measurements copied from CI logs remain
+        # attributable. --test-threads=1: isolates the stale-read guard.
+        run: |
+          cargo test -p omni-backend --features "metal debug-hooks" \
+              --test parity_cpu_vs_metal -- --nocapture --test-threads=1
+
+      - name: GPU tests did not run
+        if: env.gpu_tests_available != '1'
+        run: |
+          echo "::warning::No Metal devices were reported by this runner."
+          echo "GPU parity tests DID NOT RUN. Build was exercised, parity unverified."
+          exit 78
+
+  cross-path-diff:
+    name: macOS metallib vs source per-element diff
+    runs-on: macos-latest
+    needs: macos-metal
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Detect GPU
+        id: detect
+        run: |
+          clang++ -std=c++17 -fobjc-arc -O2 scripts/metal/list_devices.mm \
+            -framework Metal -framework Foundation -o /tmp/metal-list-devices
+          devs=$(/tmp/metal-list-devices)
+          if [ -z "$devs" ]; then
+            echo "no Metal device on this runner; skipping cross-path diff."
+            echo "have_gpu=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "$devs"
+            echo "have_gpu=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Cross-path diff
+        if: steps.detect.outputs.have_gpu == '1'
+        run: |
+          set -e
+          echo "== metallib run =="
+          OMNIPULSE_METAL_SHADERS=metallib \
+            cargo run -p omni-backend --release --features metal \
+              --example bench_cpu_vs_metal 2>&1 | tee /tmp/bench_metallib.log
+          echo
+          echo "== source run =="
+          OMNIPULSE_METAL_SHADERS=source \
+            cargo run -p omni-backend --release --features metal \
+              --example bench_cpu_vs_metal 2>&1 | tee /tmp/bench_source.log
+          echo
+          h1=$(grep '^shader_hash' /tmp/bench_metallib.log | awk '{print $NF}')
+          h2=$(grep '^shader_hash' /tmp/bench_source.log   | awk '{print $NF}')
+          echo "metallib shader hash: $h1"
+          echo "source   shader hash: $h2"
+          test "$h1" = "$h2" || {
+            echo "::error::shader hash disagrees between metallib ($h1) and source ($h2)"
+            exit 1
+          }
+      - name: No GPU on runner
+        if: steps.detect.outputs.have_gpu != '1'
+        run: echo "::warning::no Metal device; cross-path diff did not run."
+
+  # -------------------------------------------------------------------------
+  # CUDA compile-only: compiles the standalone math kernels with nvcc inside
+  # the official nvidia/cuda devel container. No GPU required; no runtime tests.
+  #
+  # Three of five .cu files in engine/wst/cpp/ compile standalone:
+  #   filter_bank.cu    -- Morlet filter bank construction     OK
+  #   memory_staging.cu -- pinned-memory staging buffers       OK
+  #   scatter.cu        -- WST scattering cascade kernel       OK
+  #
+  # Two files require external headers not present in a bare CUDA container:
+  #   wst_bindings.cu   -- Python pybind11 wrapper; needs pybind11/pybind11.h
+  #   wst_bridge.cu     -- Rust cxx bridge; needs rust/cxx.h (cargo-generated)
+  #
+  # Neither of those two files is a math kernel; they are FFI bindings that
+  # are compiled by their respective build systems (pybind11 via
+  # scikit-build-core, cxx via cargo build).
+  #
+  # No GPU parity between CUDA and CPU has been measured. These kernels have
+  # not been run. Do not claim CUDA speed or parity.
+  # -------------------------------------------------------------------------
+  cuda-compile-only:
+    name: CUDA compile-only (no GPU required)
+    runs-on: ubuntu-latest
+    container:
+      image: nvidia/cuda:12.3.1-devel-ubuntu22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show nvcc version
+        run: nvcc --version
+      - name: Compile standalone CUDA math kernels
+        # Only the three standalone math kernels; wst_bindings.cu (pybind11)
+        # and wst_bridge.cu (cxx) need their respective build systems.
+        run: |
+          cd engine/wst/cpp
+          for f in filter_bank.cu memory_staging.cu scatter.cu; do
+            echo -n "  $f ... "
+            nvcc -c "$f" -I. -arch=sm_75 --std=c++17 -o "/tmp/${f%.cu}.o" && echo "ok"
+          done

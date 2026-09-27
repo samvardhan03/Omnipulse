@@ -1,0 +1,40 @@
+[package]
+name         = "omni-backend"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description  = "Compute backend seam for the OmniPulse WST engine (CPU real, CUDA/Metal declared)."
+
+[features]
+default = []
+# Compile the Metal WST backend (macOS + Metal-capable GPU). Off by default
+# so Linux CI and the default macOS build stay hermetic; turn it on with
+# `--features metal` when building on a Metal-equipped Mac. See
+# docs/runbooks/metal.md for the choice between the runtime-source and the
+# offline-metallib shader path (env var OMNIPULSE_METAL_SHADERS).
+metal = ["dep:omni-metal-sys", "omni-metal-sys/metal"]
+# Enables the test-only sentinel + skip-sync knobs on the Metal bridge so
+# the stale-read guard in tests/parity_cpu_vs_metal.rs can force the
+# Managed-storage failure mode on purpose. Never enabled in release.
+debug-hooks = ["omni-metal-sys/debug-hooks"]
+
+[dependencies]
+omni-ffi        = { path = "../omni-ffi" }
+omni-metal-sys  = { path = "../omni-metal-sys", optional = true }
+serde           = { workspace = true }
+thiserror       = { workspace = true }
+tracing         = { workspace = true }
+sha3            = "0.10"
+hex             = { workspace = true }
+
+[dev-dependencies]
+approx     = { workspace = true }
+
+# CPU-vs-Metal timing example. Requires the `metal` feature.
+#   cargo run -p omni-backend --release --features metal --example bench_cpu_vs_metal
+# Rows produced go into docs/measurements/metal_vs_cpu.md.
+[[example]]
+name = "bench_cpu_vs_metal"
+required-features = ["metal"]

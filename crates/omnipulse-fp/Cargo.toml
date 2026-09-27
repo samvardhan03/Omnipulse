@@ -1,0 +1,27 @@
+[package]
+name         = "omnipulse-fp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description  = "CLI tool: decode two audio files, fingerprint both, print the SW1 distance."
+
+[[bin]]
+name = "omnipulse-fp"
+path = "src/main.rs"
+
+[features]
+default = []
+# Enable the Metal WST backend (macOS only). Requires a Metal-capable GPU.
+metal = ["omni-backend/metal"]
+
+[dependencies]
+omni-backend  = { path = "../omni-backend" }
+anyhow.workspace = true
+
+# CLI argument parsing.
+clap = { version = "4", features = ["derive"] }
+
+# Audio decoding: WAV, FLAC, MP3, M4A/AAC.
+symphonia = { version = "0.5", features = ["mp3", "flac", "wav", "pcm", "isomp4", "aac"] }
