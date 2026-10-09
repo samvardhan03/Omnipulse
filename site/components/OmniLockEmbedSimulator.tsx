@@ -201,7 +201,7 @@ export default function OmniLockEmbedSimulator() {
     stage !== "idle" && stage !== "token" && !stage.startsWith("verify");
 
   return (
-    <section id="omnilock-embed" style={{ borderBottom: "1px solid var(--rule)" }}>
+    <section style={{ borderBottom: "1px solid var(--rule)" }}>
       <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>OmniLock embed simulator</Eyebrow>

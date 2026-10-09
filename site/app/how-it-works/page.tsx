@@ -231,7 +231,9 @@ export default function HowItWorksPage() {
 
         <TwoLayerMergerSection />
         <TwoLayerSynthIdGrid />
-        <OmniLockEmbedSimulator />
+        <div id="omnilock-embed">
+          <OmniLockEmbedSimulator />
+        </div>
         <InteractiveSimulator />
         <VerdictsSection />
         <AttestationsSection />
