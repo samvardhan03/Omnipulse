@@ -154,50 +154,29 @@ const GRAPHICS: Record<string, React.ReactNode> = {
 export default function ModularCommercializationGrid() {
   return (
     <section id="platform" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Modular commercialisation</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             Four tiers, one fingerprint plane
           </h2>
         </div>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-px"
-          style={{ border: "1px solid var(--rule)" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {TIERS.map((tier) => (
-            <Link
+            <article
               key={tier.phase}
-              href={tier.deepdiveHref}
-              className="group relative block p-8 transition-colors"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderBottom: "1px solid var(--rule)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = "var(--bg-elev)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = "var(--bg)";
-              }}
+              className="surface-card interactive-card group relative block p-card"
             >
               {/* Pastel graphic — fades in on hover */}
               <div
-                className="absolute top-6 right-6 pointer-events-none transition-opacity duration-300"
-                style={{ opacity: 0 }}
-                ref={(el) => {
-                  if (!el) return;
-                  const parent = el.closest("a");
-                  if (!parent) return;
-                  const show = () => { el.style.opacity = "1"; };
-                  const hide = () => { el.style.opacity = "0"; };
-                  parent.addEventListener("mouseenter", show);
-                  parent.addEventListener("mouseleave", hide);
-                }}
+                className="absolute top-6 right-6 pointer-events-none opacity-0 transition-opacity duration-300 group-hover:opacity-20 group-focus-within:opacity-20"
+                aria-hidden="true"
               >
                 {GRAPHICS[tier.phase]}
               </div>
@@ -206,13 +185,13 @@ export default function ModularCommercializationGrid() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex flex-col gap-1">
                     <p
-                      className="font-mono text-[11px] uppercase tracking-[0.14em]"
+                      className="font-sans text-label uppercase tracking-label"
                       style={{ color: "var(--ink-mute)" }}
                     >
                       Phase {tier.phase}
                     </p>
                     <h3
-                      className="font-serif font-light text-[22px] leading-tight"
+                      className="font-display font-medium text-card-title"
                       style={{ color: "var(--ink)" }}
                     >
                       {tier.title}
@@ -220,7 +199,7 @@ export default function ModularCommercializationGrid() {
                   </div>
                   {tier.commercial && (
                     <span
-                      className="font-mono text-[10px] uppercase tracking-[0.1em] px-2 py-1 border shrink-0"
+                      className="font-sans text-label uppercase tracking-[0.1em] px-2 py-1 border shrink-0"
                       style={{
                         borderColor: "var(--signal-warm)",
                         color: "var(--signal-warm)",
@@ -231,17 +210,17 @@ export default function ModularCommercializationGrid() {
                   )}
                 </div>
 
-                <p className="text-[15px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+                <p className="text-body" style={{ color: "var(--ink-mute)" }}>
                   {tier.sub}
                 </p>
-                <p className="text-[13px] leading-[1.55]" style={{ color: "var(--ink)" }}>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] mr-2" style={{ color: "var(--ink-mute)" }}>Scope:</span>
+                <p className="text-small" style={{ color: "var(--ink)" }}>
+                  <span className="font-sans text-label uppercase tracking-label mr-2" style={{ color: "var(--ink-mute)" }}>Scope:</span>
                   {tier.how}
                 </p>
 
                 {tier.pkg ? (
                   <code
-                    className="font-mono text-[12px] px-3 py-2 border block"
+                    className="font-mono text-code px-3 py-2 border block"
                     style={{
                       borderColor: "var(--rule)",
                       backgroundColor: "var(--bg)",
@@ -252,45 +231,33 @@ export default function ModularCommercializationGrid() {
                   </code>
                 ) : null}
 
-                {/* Primary CTA — "Know how it works" */}
-                <div className="flex flex-col gap-2 mt-2">
-                  <span
-                    className="font-mono text-[13px] uppercase tracking-[0.12em] transition-opacity"
-                    style={{ color: "var(--ink)" }}
+                <div className="flex flex-wrap items-center gap-4 mt-2">
+                  <Link
+                    href={tier.deepdiveHref}
+                    className="card-link font-sans text-small font-semibold text-ink"
                   >
-                    → Know how it works
-                  </span>
-
+                    Explore this tier <span aria-hidden="true">→</span>
+                  </Link>
                   {"requestAccess" in tier && tier.requestAccess && (
-                    <span
-                      className="font-mono text-[12px] uppercase tracking-[0.12em] px-4 py-2 border transition-opacity hover:opacity-70 inline-block w-fit"
+                    <a
+                      href={PLATFORM_URL ?? `mailto:${CONTACT_EMAIL}?subject=OmniPulse%20access%20request`}
+                      className="card-secondary ui-button border"
                       style={{ borderColor: "var(--signal-warm)", backgroundColor: "var(--signal-warm)", color: "var(--bg)" }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const url = PLATFORM_URL ?? `mailto:${CONTACT_EMAIL}?subject=OmniPulse%20access%20request`;
-                        window.location.href = url;
-                      }}
                     >
                       Request access
-                    </span>
+                    </a>
                   )}
-
-                  {/* Secondary — external link */}
-                  <span
-                    className="font-mono text-[11px] uppercase tracking-[0.1em] transition-opacity hover:opacity-60"
-                    style={{ color: "var(--ink-mute)" }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      window.open(tier.externalHref, tier.externalHref.startsWith("mailto") ? "_self" : "_blank");
-                    }}
+                  <a
+                    href={tier.externalHref}
+                    target={tier.externalHref.startsWith("mailto") ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    className="card-secondary font-sans text-small text-ink-mute hover:text-ink"
                   >
-                    {tier.externalLabel}
-                  </span>
+                    {tier.externalLabel} <span aria-hidden="true">↗</span>
+                  </a>
                 </div>
               </div>
-            </Link>
+            </article>
           ))}
         </div>
       </div>

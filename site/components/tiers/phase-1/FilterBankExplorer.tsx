@@ -60,12 +60,12 @@ export default function FilterBankExplorer() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Left rail — controls */}
         <div className="flex flex-col gap-5 md:col-span-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--ink-mute)" }}>
+          <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
             WSTConfig
           </p>
           {([["J", j, setJ, 1, 10], ["Q", q, setQ, 1, 32]] as const).map(([label, val, setter, min, max]) => (
             <div key={String(label)} className="flex flex-col gap-1">
-              <label className="font-mono text-[12px] uppercase" style={{ color: "var(--ink-mute)" }}>
+              <label className="font-sans text-label uppercase" style={{ color: "var(--ink-mute)" }}>
                 {label} = {val}
               </label>
               <input
@@ -84,7 +84,7 @@ export default function FilterBankExplorer() {
           ))}
 
           <div className="flex flex-col gap-1">
-            <p className="font-mono text-[12px] uppercase" style={{ color: "var(--ink-mute)" }}>
+            <p className="font-sans text-label uppercase" style={{ color: "var(--ink-mute)" }}>
               Depth
             </p>
             <div className="flex gap-2">
@@ -92,7 +92,7 @@ export default function FilterBankExplorer() {
                 <button
                   key={d}
                   onClick={() => setDepth(d)}
-                  className="font-mono text-[12px] px-3 py-1 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{
                     borderColor: depth === d ? PASTEL_BLUE : "var(--rule)",
                     color: depth === d ? PASTEL_BLUE : "var(--ink-mute)",
@@ -111,13 +111,13 @@ export default function FilterBankExplorer() {
               checked={jtfs}
               onChange={(e) => setJtfs(e.target.checked)}
             />
-            <label htmlFor="jtfs-fb" className="font-mono text-[12px]" style={{ color: "var(--ink)" }}>
+            <label htmlFor="jtfs-fb" className="font-sans text-code" style={{ color: "var(--ink)" }}>
               JTFS
             </label>
           </div>
 
           <div
-            className="p-3 border font-mono text-[12px]"
+            className="p-3 border font-mono text-code"
             style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
           >
             <span style={{ color: PASTEL_BLUE }}>{bank.pathCount.toLocaleString()}</span> scattering paths
@@ -130,7 +130,7 @@ export default function FilterBankExplorer() {
           <div className="grid grid-cols-2 gap-4">
             {/* Time domain */}
             <div className="flex flex-col gap-2">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+              <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
                 Time domain: λ={selectedLambda}
               </p>
               <canvas
@@ -142,7 +142,7 @@ export default function FilterBankExplorer() {
 
             {/* Frequency domain */}
             <div className="flex flex-col gap-2">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+              <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
                 Frequency domain: bank
               </p>
               <div
@@ -186,7 +186,7 @@ export default function FilterBankExplorer() {
 
           {/* Tooltip */}
           <div
-            className="font-mono text-[12px] p-3 border min-h-[44px]"
+            className="font-mono text-code p-3 border min-h-[44px]"
             style={{ borderColor: "var(--rule)", color: "var(--ink-mute)", backgroundColor: "var(--bg-elev)" }}
           >
             {tooltip ?? `Filter λ=${selectedLambda} · ξ=π·2^(-${selectedLambda}/${q}) · σ=${selected.sigma.toFixed(3)} samples · peak=${selected.peak.toFixed(3)} (analytic Morlet, normalised)`}
@@ -198,7 +198,7 @@ export default function FilterBankExplorer() {
               <button
                 key={f.lambda}
                 onClick={() => setSelectedLambda(f.lambda)}
-                className="font-mono text-[10px] px-2 py-0.5 border transition-opacity hover:opacity-70"
+                className="ui-button font-sans border"
                 style={{
                   borderColor: f.lambda === selectedLambda ? PASTEL_BLUE : "var(--rule)",
                   color: f.lambda === selectedLambda ? PASTEL_BLUE : "var(--ink-mute)",

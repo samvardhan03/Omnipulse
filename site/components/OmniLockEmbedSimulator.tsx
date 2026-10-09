@@ -103,7 +103,7 @@ function LdpcRow({ id }: { id: bigint }) {
   const codeword = [...bits, ...parity];
   return (
     <div className="flex flex-col gap-2 p-3 border" style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}>
-      <p className="font-mono text-[11px] uppercase tracking-[0.12em]" style={{ color: "var(--ink-mute)" }}>
+      <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
         64-bit ID → 128-bit codeword
       </p>
       <div className="flex flex-wrap gap-[2px]">
@@ -125,10 +125,10 @@ function LdpcRow({ id }: { id: bigint }) {
         ))}
       </div>
       <div className="flex gap-4">
-        <span className="font-mono text-[10px]" style={{ color: "var(--ink-mute)" }}>
+        <span className="font-sans text-small" style={{ color: "var(--ink-mute)" }}>
           data (64 bits, dark)
         </span>
-        <span className="font-mono text-[10px]" style={{ color: "var(--signal-warm)" }}>
+        <span className="font-mono text-code" style={{ color: "var(--signal-warm)" }}>
           parity (64 bits, orange)
         </span>
       </div>
@@ -202,16 +202,16 @@ export default function OmniLockEmbedSimulator() {
 
   return (
     <section id="omnilock-embed" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>OmniLock embed simulator</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             Embed a signed identifier. Verify it back.
           </h2>
-          <p style={{ color: "var(--ink-mute)", fontSize: 16, maxWidth: 560 }}>
+          <p className="text-body max-w-[560px]" style={{ color: "var(--ink-mute)" }}>
             Choose a sample image or drop your own. The 64-bit identifier is
             derived deterministically from the image bytes, in your browser.
           </p>
@@ -236,7 +236,7 @@ export default function OmniLockEmbedSimulator() {
                     }}
                   />
                   <span
-                    className="font-mono text-[11px] uppercase tracking-[0.1em] whitespace-nowrap"
+                    className="font-sans text-label uppercase tracking-[0.1em] whitespace-nowrap"
                     style={{ color: reached ? "var(--ink)" : "var(--ink-mute)" }}
                   >
                     {STAGE_LABELS[s]}
@@ -256,7 +256,7 @@ export default function OmniLockEmbedSimulator() {
                   }}
                 />
                 <span
-                  className="font-mono text-[11px] uppercase tracking-[0.1em] whitespace-nowrap"
+                  className="font-sans text-label uppercase tracking-[0.1em] whitespace-nowrap"
                   style={{
                     color: stage === "verify-ok" ? "#2A9D8F" : "var(--ink-mute)",
                   }}
@@ -287,14 +287,14 @@ export default function OmniLockEmbedSimulator() {
                         height={72}
                         style={{ objectFit: "cover", display: "block" }}
                       />
-                      <span className="font-mono text-[11px]" style={{ color: "var(--ink-mute)" }}>
+                      <span className="font-sans text-small" style={{ color: "var(--ink-mute)" }}>
                         {s.label}
                       </span>
                     </button>
                   ))}
                 </div>
                 <label
-                  className="flex flex-col items-center justify-center p-8 border-2 border-dashed cursor-pointer transition-opacity hover:opacity-70"
+                  className="flex flex-col items-center justify-center p-card upload-zone border-2 border-dashed cursor-pointer"
                   style={{ borderColor: "var(--rule)" }}
                 >
                   <input
@@ -306,10 +306,10 @@ export default function OmniLockEmbedSimulator() {
                       e.target.files?.[0] && handleFile(e.target.files[0])
                     }
                   />
-                  <span className="font-mono text-[13px]" style={{ color: "var(--ink-mute)" }}>
+                  <span className="font-sans text-small" style={{ color: "var(--ink-mute)" }}>
                     Drop or click to upload your own image
                   </span>
-                  <span className="font-mono text-[11px] mt-1" style={{ color: "var(--ink-mute)" }}>
+                  <span className="font-sans text-small mt-1" style={{ color: "var(--ink-mute)" }}>
                     Processed entirely in your browser, never uploaded
                   </span>
                 </label>
@@ -336,7 +336,7 @@ export default function OmniLockEmbedSimulator() {
                 )}
                 {stage === "dct" && (
                   <div
-                    className="absolute bottom-2 left-2 right-2 font-mono text-[11px] px-2 py-1"
+                    className="absolute bottom-2 left-2 right-2 font-mono text-code px-2 py-1"
                     style={{ backgroundColor: "rgba(27,27,31,0.8)", color: "rgba(255,255,255,0.85)" }}
                   >
                     Mid-band DCT cells highlighted (2 &lt;= u+v &lt;= 6)
@@ -350,29 +350,29 @@ export default function OmniLockEmbedSimulator() {
             {(stage === "token" || stage === "verify-run" || stage === "verify-ok") && hex && (
               <div className="flex flex-col gap-3 p-4 border" style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}>
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] mb-1" style={{ color: "var(--ink-mute)" }}>
+                  <p className="font-sans text-label uppercase tracking-label mb-1" style={{ color: "var(--ink-mute)" }}>
                     64-bit ID
                   </p>
-                  <code className="font-mono text-[13px]" style={{ color: "var(--signal-warm)" }}>
+                  <code className="font-mono text-code" style={{ color: "var(--signal-warm)" }}>
                     0x{hex}
                   </code>
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] mb-1" style={{ color: "var(--ink-mute)" }}>
+                  <p className="font-sans text-label uppercase tracking-label mb-1" style={{ color: "var(--ink-mute)" }}>
                     Ed25519 signature (demo key)
                   </p>
                   <code
-                    className="font-mono text-[11px] break-all"
+                    className="font-mono text-code break-all"
                     style={{ color: "var(--ink)" }}
                   >
                     {sig}
                   </code>
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] mb-1" style={{ color: "var(--ink-mute)" }}>
+                  <p className="font-sans text-label uppercase tracking-label mb-1" style={{ color: "var(--ink-mute)" }}>
                     IPFS CID
                   </p>
-                  <code className="font-mono text-[11px] break-all" style={{ color: "var(--ink)" }}>
+                  <code className="font-mono text-code break-all" style={{ color: "var(--ink)" }}>
                     {cid}
                   </code>
                 </div>
@@ -385,15 +385,15 @@ export default function OmniLockEmbedSimulator() {
                 style={{ borderColor: "#2A9D8F", backgroundColor: "rgba(42,157,143,0.06)" }}
               >
                 <p
-                  className="font-mono text-[12px] uppercase tracking-[0.14em]"
+                  className="font-sans text-label uppercase tracking-label"
                   style={{ color: "#2A9D8F" }}
                 >
                   Syndrome: clean
                 </p>
-                <p className="font-mono text-[13px]" style={{ color: "var(--ink)" }}>
+                <p className="font-mono text-code" style={{ color: "var(--ink)" }}>
                   Recovered ID: <span style={{ color: "var(--signal-warm)" }}>0x{hex}</span>
                 </p>
-                <p className="font-mono text-[11px]" style={{ color: "var(--ink-mute)" }}>
+                <p className="font-mono text-code" style={{ color: "var(--ink-mute)" }}>
                   Matches embedded ID exactly.
                 </p>
               </div>
@@ -403,7 +403,7 @@ export default function OmniLockEmbedSimulator() {
               {canAdvance && (
                 <button
                   onClick={advance}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "var(--signal-warm)", color: "var(--signal-warm)" }}
                 >
                   Next step
@@ -412,7 +412,7 @@ export default function OmniLockEmbedSimulator() {
               {stage === "token" && (
                 <button
                   onClick={verify}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "#2A9D8F", color: "#2A9D8F" }}
                 >
                   Verify
@@ -421,7 +421,7 @@ export default function OmniLockEmbedSimulator() {
               {stage !== "idle" && (
                 <button
                   onClick={reset}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
                 >
                   Reset
@@ -432,17 +432,17 @@ export default function OmniLockEmbedSimulator() {
 
           {/* Right: info */}
           <div className="col-span-12 md:col-span-3 flex flex-col gap-4">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+            <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
               Pipeline
             </p>
-            <div className="flex flex-col gap-2 text-[13px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+            <div className="flex flex-col gap-2 text-small" style={{ color: "var(--ink-mute)" }}>
               <p>ID derived from SHA3-256 of image bytes, truncated to 64 bits.</p>
               <p>LDPC expands 64 bits to 128-bit codeword. Parity bits shown in orange.</p>
               <p>Mask is confined to DCT mid-band (2 &lt;= u+v &lt;= 6) per codec physics.</p>
               <p>Token is an Ed25519 signature over ID + timestamp + IPFS CID.</p>
             </div>
             <div
-              className="mt-4 p-3 border text-[12px] leading-[1.55]"
+              className="mt-4 p-3 border text-small"
               style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
             >
               Demo runs entirely in your browser with a demonstration key.
@@ -450,7 +450,7 @@ export default function OmniLockEmbedSimulator() {
             </div>
             <a
               href="/#contact"
-              className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+              className="font-sans text-label uppercase tracking-label transition-opacity hover:opacity-60"
               style={{ color: "var(--ink-mute)" }}
             >
               Talk to us

@@ -21,19 +21,19 @@ export default function JsonRpcLane({ active, envelope }: JsonRpcLaneProps) {
 }`;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 font-medium">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+        <span className="font-sans font-semibold text-label uppercase tracking-label" style={{ color: "var(--ink)" }}>
           Stdio JSON-RPC envelope
         </span>
       </div>
       <motion.div
         className="p-4 border overflow-auto max-h-[180px]"
-        style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
-        animate={{ opacity: active ? 1 : 0.4 }}
+        style={{ borderColor: "var(--panel-rule)", backgroundColor: "var(--bg-elev)" }}
+        animate={{ borderColor: active ? "var(--signal-warm)" : "var(--panel-rule)" }}
         transition={{ duration: 0.3 }}
       >
-        <pre className="font-mono text-[12px] whitespace-pre-wrap" style={{ color: "var(--ink)" }}>
+        <pre className="font-mono text-code whitespace-pre-wrap" style={{ color: "var(--ink)" }}>
           {text}
         </pre>
       </motion.div>

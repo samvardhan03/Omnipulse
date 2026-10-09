@@ -31,14 +31,14 @@ export default function TwoLayerDctExplorer() {
   return (
     <div className="flex flex-col gap-3">
       <p
-        className="font-mono text-[11px] uppercase tracking-[0.14em]"
+        className="font-sans text-label uppercase tracking-label"
         style={{ color: "var(--signal-warm)" }}
       >
         DCT band explorer
       </p>
       <div
-        className="inline-grid"
-        style={{ gridTemplateColumns: "repeat(8, 28px)", gap: 2 }}
+        className="grid w-full max-w-[238px]"
+        style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))", gap: 2 }}
         role="grid"
         aria-label="8x8 DCT coefficient grid"
       >
@@ -56,8 +56,8 @@ export default function TwoLayerDctExplorer() {
                 onFocus={() => setHovered({ u, v })}
                 onBlur={() => setHovered(null)}
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: "100%",
+                  aspectRatio: "1",
                   border: "1px solid",
                   borderColor: isHov ? "var(--ink)" : "var(--rule)",
                   backgroundColor:
@@ -83,7 +83,7 @@ export default function TwoLayerDctExplorer() {
         {band ? (
           <div className="flex flex-col gap-1">
             <p
-              className="font-mono text-[10px] uppercase tracking-[0.14em]"
+              className="font-sans text-label uppercase tracking-label"
               style={{
                 color:
                   band === "mid"
@@ -93,19 +93,19 @@ export default function TwoLayerDctExplorer() {
             >
               {BAND_EYEBROWS[band]}
             </p>
-            <p className="text-[13px] leading-[1.5]" style={{ color: "var(--ink-mute)" }}>
+            <p className="text-small" style={{ color: "var(--ink-mute)" }}>
               {BAND_LABELS[band]}
             </p>
           </div>
         ) : (
-          <p className="text-[13px]" style={{ color: "var(--ink-mute)" }}>
+          <p className="text-small" style={{ color: "var(--ink-mute)" }}>
             Hover or tab to any cell to see its role.
           </p>
         )}
       </div>
 
       <p
-        className="font-mono text-[11px] leading-[1.6]"
+        className="font-mono text-code"
         style={{ color: "var(--ink-mute)", borderTop: "1px solid var(--rule)", paddingTop: 8 }}
       >
         25 of 64 coefficients per block: chosen by codec physics, not by preference.

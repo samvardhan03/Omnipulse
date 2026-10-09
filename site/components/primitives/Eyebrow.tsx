@@ -9,7 +9,7 @@ export default function Eyebrow({ children, className }: EyebrowProps) {
   return (
     <p
       className={clsx(
-        "font-mono text-[14px] uppercase tracking-[0.18em] leading-[1.4]",
+        "eyebrow font-sans text-eyebrow uppercase",
         className
       )}
       style={{ color: "var(--accent)" }}

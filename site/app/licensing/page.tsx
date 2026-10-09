@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import DualLicensingProtocolSection from "@/components/licensing/DualLicensingProtocolSection";
-import HairlineRule from "@/components/primitives/HairlineRule";
+import PageHeader from "@/components/primitives/PageHeader";
 import SiteFooter from "@/components/footer/SiteFooter";
 
 export const metadata = {
@@ -14,20 +14,8 @@ export default function LicensingPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="mx-auto max-w-[1280px] px-6 pt-28 pb-24">
-        <p
-          className="font-mono text-[11px] uppercase tracking-[0.18em]"
-          style={{ color: "var(--ink-mute)" }}
-        >
-          Licensing
-        </p>
-        <h1
-          className="font-serif font-light mt-3"
-          style={{ fontSize: "clamp(32px,4vw,64px)", color: "var(--ink)" }}
-        >
-          Dual-licensing protocol
-        </h1>
-        <HairlineRule className="my-12" />
+      <main id="main-content" className="pt-16 pb-24">
+        <PageHeader eyebrow="Licensing" title="Dual-licensing protocol" />
         <DualLicensingProtocolSection />
       </main>
       <SiteFooter />

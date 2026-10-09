@@ -10,19 +10,19 @@ interface KernelLaneProps {
 
 export default function KernelLane({ active, useGpu, onToggle }: KernelLaneProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 font-medium">
       <div className="flex items-center gap-2 justify-between">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+          <span className="font-sans font-semibold text-label uppercase tracking-label" style={{ color: "var(--ink)" }}>
             C++/CUDA kernel
           </span>
         </div>
         <button
           onClick={onToggle}
-          className="font-mono text-[11px] uppercase tracking-[0.1em] px-3 py-1 border transition-opacity hover:opacity-70"
+          className="ui-button font-sans border"
           style={{
             borderColor: "var(--rule)",
-            color: useGpu ? "var(--accent)" : "var(--ink-mute)",
+            color: useGpu ? "var(--accent)" : "var(--ink)",
             backgroundColor: "var(--bg-elev)",
           }}
         >
@@ -30,14 +30,14 @@ export default function KernelLane({ active, useGpu, onToggle }: KernelLaneProps
         </button>
       </div>
       <motion.div
-        className="p-4 border font-mono text-[12px]"
-        style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
-        animate={{ opacity: active ? 1 : 0.4 }}
+        className="code-panel p-4 border font-mono text-code"
+        style={{ borderColor: "var(--panel-rule)", backgroundColor: "var(--bg-elev)" }}
+        animate={{ borderColor: active ? "var(--signal-warm)" : "var(--panel-rule)" }}
         transition={{ duration: 0.3 }}
       >
         {useGpu ? (
           <>
-            <span style={{ color: "var(--ink-mute)" }}>{"// CUDA Hopper - wst_bridge_cuda.cpp"}</span>
+            <span style={{ color: "var(--ink)" }}>{"// CUDA Hopper - wst_bridge_cuda.cpp"}</span>
             {"\n"}
             <span style={{ color: "var(--accent)" }}>{"WSTEngine"}</span>
             <span style={{ color: "var(--ink)" }}>{"<HopperTag, /*J=*/8, /*Q=*/16> engine;"}</span>
@@ -46,7 +46,7 @@ export default function KernelLane({ active, useGpu, onToggle }: KernelLaneProps
           </>
         ) : (
           <>
-            <span style={{ color: "var(--ink-mute)" }}>{"// CPU Morlet fallback - wst_bridge_cpu.cpp"}</span>
+            <span style={{ color: "var(--ink)" }}>{"// CPU Morlet fallback - wst_bridge_cpu.cpp"}</span>
             {"\n"}
             <span style={{ color: "var(--accent)" }}>{"AnalyticMorletBank"}</span>
             <span style={{ color: "var(--ink)" }}>{"<8, 16> bank;"}</span>
@@ -55,7 +55,7 @@ export default function KernelLane({ active, useGpu, onToggle }: KernelLaneProps
           </>
         )}
         {"\n"}
-        <span style={{ color: "var(--ink-mute)" }}>
+        <span style={{ color: "var(--ink)" }}>
           {`# build: cargo build -p omnipulse-mcp --features ${useGpu ? "cuda --release" : "omni-ffi"}`}
         </span>
       </motion.div>

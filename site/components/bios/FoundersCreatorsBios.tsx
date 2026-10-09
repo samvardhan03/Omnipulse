@@ -1,15 +1,16 @@
 import Eyebrow from "@/components/primitives/Eyebrow";
+import ProfileLink from "@/components/primitives/ProfileLink";
 import { FOUNDERS } from "./founders.data";
 
 export default function FoundersCreatorsBios() {
   return (
     <section id="team" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Founders &amp; creators</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             The people behind the platform
           </h2>
@@ -19,18 +20,18 @@ export default function FoundersCreatorsBios() {
           {FOUNDERS.map((f) => (
             <div
               key={f.name}
-              className="border flex flex-col gap-5 p-8"
+              className="team-profile flex flex-col gap-5 py-6"
               style={{ borderColor: "var(--rule)" }}
             >
               <div className="flex flex-col gap-1">
                 <p
-                  className="font-mono text-[11px] uppercase tracking-[0.18em]"
+                  className="font-sans text-label uppercase tracking-label"
                   style={{ color: "var(--accent)" }}
                 >
                   {f.eyebrow}
                 </p>
                 <h3
-                  className="font-serif font-light text-[28px] leading-tight"
+                  className="font-display font-medium text-card-title"
                   style={{ color: "var(--ink)" }}
                 >
                   {f.name}
@@ -38,13 +39,13 @@ export default function FoundersCreatorsBios() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink)" }}>
+                <p className="text-body" style={{ color: "var(--ink)" }}>
                   {f.role}
                 </p>
-                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+                <p className="text-body" style={{ color: "var(--ink-mute)" }}>
                   {f.focus}
                 </p>
-                <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+                <p className="text-body" style={{ color: "var(--ink-mute)" }}>
                   {f.maintainsLinks.length > 0 ? (
                     <>
                       Maintains{" "}
@@ -55,7 +56,7 @@ export default function FoundersCreatorsBios() {
                             className="transition-opacity hover:opacity-70"
                             style={{ color: "var(--ink)" }}
                           >
-                            <code className="font-mono text-[13px]">{m.label}</code>
+                            <code className="font-mono text-code">{m.label}</code>
                           </a>
                           {i < f.maintainsLinks.length - 1 ? ", " : "."}
                         </span>
@@ -67,41 +68,17 @@ export default function FoundersCreatorsBios() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-1 pt-2">
-                {f.portfolio && (
-                  <a
-                    href={f.portfolio}
-                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                    style={{ color: "var(--ink-mute)" }}
-                  >
-                    {f.portfolio.replace("https://", "")}
-                  </a>
-                )}
-                {f.linkedin && (
-                  <a
-                    href={f.linkedin}
-                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                    style={{ color: "var(--ink-mute)" }}
-                  >
-                    {f.linkedin.replace("https://", "")}
-                  </a>
-                )}
-                {f.github && (
-                  <a
-                    href={f.github}
-                    className="font-mono text-[12px] transition-opacity hover:opacity-60"
-                    style={{ color: "var(--ink-mute)" }}
-                  >
-                    {f.github.replace("https://", "")}
-                  </a>
-                )}
+              <div className="mt-auto flex items-center gap-3 pt-2">
+                {f.portfolio && <ProfileLink kind="portfolio" href={f.portfolio} name={f.name} />}
+                {f.linkedin && <ProfileLink kind="linkedin" href={f.linkedin} name={f.name} />}
+                {f.github && <ProfileLink kind="github" href={f.github} name={f.name} />}
               </div>
             </div>
           ))}
         </div>
 
         <aside
-          className="mt-4 border-t pt-6 font-mono text-[13px]"
+          className="mt-4 border-t pt-6 font-sans text-small"
           style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
         >
           Co-authored:{" "}

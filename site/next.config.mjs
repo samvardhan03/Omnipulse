@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
 
 /*
  * Security headers rationale
@@ -30,6 +30,7 @@ const securityHeaders = [
   },
 ];
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   async headers() {
@@ -42,4 +43,10 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default function config(phase) {
+  return {
+    ...nextConfig,
+    // Keep production builds from replacing chunks used by a running dev server.
+    distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
+  };
+}

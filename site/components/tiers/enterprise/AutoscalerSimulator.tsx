@@ -44,14 +44,14 @@ function MiniChart({ throughput, slaSec }: { throughput: number; slaSec: number 
 
   return (
     <div className="border" style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}>
-      <p className="font-mono text-[11px] uppercase tracking-[0.12em] px-4 pt-3" style={{ color: "var(--ink-mute)" }}>
+      <p className="font-sans text-label uppercase tracking-label px-4 pt-3" style={{ color: "var(--ink-mute)" }}>
         Prometheus: request rate · queue depth · tail latency
       </p>
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ height: 80 }}>
         <path d={rpsPath} fill="none" stroke={PASTEL_BLUE} strokeWidth={1.5} />
         <path d={qdPath} fill="none" stroke="var(--signal-warm)" strokeWidth={1} strokeDasharray="4 2" />
       </svg>
-      <div className="flex gap-4 px-4 pb-3 font-mono text-[11px]">
+      <div className="flex gap-4 px-4 pb-3 font-mono text-code">
         <span style={{ color: PASTEL_BLUE }}>── request rate</span>
         <span style={{ color: "var(--signal-warm)" }}>╌ queue depth</span>
       </div>
@@ -76,7 +76,7 @@ export default function AutoscalerSimulator() {
           { label: `$/h per pod: $${costPerPodHr.toFixed(2)}`, min: 10, max: 400, step: 5, val: costPerPodHr, set: setCostPerPodHr },
         ] as const).map((ctrl) => (
           <div key={ctrl.label} className="flex flex-col gap-1">
-            <label className="font-mono text-[12px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-mute)" }}>
+            <label className="font-sans text-label uppercase tracking-[0.1em]" style={{ color: "var(--ink-mute)" }}>
               {ctrl.label}
             </label>
             <input
@@ -97,7 +97,7 @@ export default function AutoscalerSimulator() {
 
       {/* GPU pod grid */}
       <div className="flex flex-col gap-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+        <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
           GPU pod grid - {m.steadyPods} steady + {m.warmReserve} warm reserve
         </p>
         <div className="flex flex-wrap gap-2">
@@ -121,12 +121,12 @@ export default function AutoscalerSimulator() {
                   }}
                 >
                   <p
-                    className="font-mono text-[10px] uppercase"
+                    className="font-sans text-label uppercase"
                     style={{ color: isSteady ? PASTEL_BLUE : "var(--ink-mute)" }}
                   >
                     {isSteady ? "H100" : isWarm ? "warm" : "burst"}
                   </p>
-                  <p className="font-mono text-[11px]" style={{ color: "var(--ink)" }}>
+                  <p className="font-mono text-code" style={{ color: "var(--ink)" }}>
                     {isSteady ? m.loadPct : isWarm ? "n/a" : "0"}%
                   </p>
                 </motion.div>
@@ -138,7 +138,7 @@ export default function AutoscalerSimulator() {
 
       {/* Side summary */}
       <div
-        className="border p-5 font-mono text-[13px] flex flex-col gap-2"
+        className="border p-5 font-mono text-code flex flex-col gap-2"
         style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink-mute)" }}
       >
         <p>

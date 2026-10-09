@@ -40,14 +40,14 @@ export default function ProblemTicker() {
 
   return (
     <div
-      className="max-w-[1280px] mx-auto px-6 py-5"
+      className="site-container py-5"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{ borderBottom: "1px solid var(--rule)" }}
     >
       <div className="flex items-center gap-4 min-h-[28px]">
         <span
-          className="font-mono text-[11px] uppercase tracking-[0.16em] shrink-0"
+          className="font-sans text-label uppercase tracking-label shrink-0"
           style={{ color: "var(--ink-mute)" }}
         >
           Problem
@@ -57,7 +57,7 @@ export default function ProblemTicker() {
           <AnimatePresence mode="wait">
             <motion.p
               key={index}
-              className="font-mono text-[13px] leading-[1.5]"
+              className="font-sans text-small"
               style={{ color: "var(--ink-mute)" }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}

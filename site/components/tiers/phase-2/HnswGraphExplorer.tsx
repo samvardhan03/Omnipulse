@@ -86,7 +86,7 @@ export default function HnswGraphExplorer() {
             <button
               key={m}
               onClick={() => setMetric(m)}
-              className="font-mono text-[12px] uppercase tracking-[0.1em] px-3 py-1.5 border transition-opacity hover:opacity-70"
+              className="ui-button font-sans border"
               style={{
                 borderColor: metric === m ? PASTEL_BLUE : "var(--rule)",
                 color: metric === m ? PASTEL_BLUE : "var(--ink-mute)",
@@ -97,7 +97,7 @@ export default function HnswGraphExplorer() {
           ))}
         </div>
         <div className="flex items-center gap-2 ml-auto">
-          <label className="font-mono text-[12px]" style={{ color: "var(--ink-mute)" }}>
+          <label className="font-sans text-code" style={{ color: "var(--ink-mute)" }}>
             ef_search={efSearch}
           </label>
           <input
@@ -201,7 +201,7 @@ export default function HnswGraphExplorer() {
         <div className="flex flex-col gap-3">
           {selectedNode ? (
             <div
-              className="border p-4 flex flex-col gap-2 font-mono text-[12px]"
+              className="border p-4 flex flex-col gap-2 font-mono text-code"
               style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink)" }}
             >
               <p style={{ color: PASTEL_BLUE }}>Node #{selectedNode.id.toString(16).toUpperCase().padStart(5, "0")}</p>
@@ -216,7 +216,7 @@ export default function HnswGraphExplorer() {
               </p>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="mt-2 text-[11px] uppercase tracking-[0.1em]"
+                className="mt-2 text-small uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-mute)" }}
               >
                 close
@@ -224,7 +224,7 @@ export default function HnswGraphExplorer() {
             </div>
           ) : (
             <div
-              className="border p-4 font-mono text-[12px]"
+              className="border p-4 font-mono text-code"
               style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink-mute)" }}
             >
               Click a node to inspect it.
@@ -235,7 +235,7 @@ export default function HnswGraphExplorer() {
 
       {/* Bottom rail */}
       <div
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 border p-4 font-mono text-[12px]"
+        className="grid grid-cols-2 md:grid-cols-4 gap-4 border p-4 font-mono text-code"
         style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
       >
         <div>

@@ -1,274 +1,60 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { usePreviewCycle } from "@/lib/usePreviewCycle";
 
-const BEAT_DURATION = 2000;
-const TOTAL_BEATS = 4;
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-  return reduced;
-}
-
-function DctGrid({ pulse }: { pulse: boolean }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(8, 1fr)",
-        gap: 1,
-        position: "absolute",
-        inset: 0,
-      }}
-    >
-      {Array.from({ length: 64 }, (_, i) => {
-        const u = Math.floor(i / 8);
-        const v = i % 8;
-        const s = u + v;
-        const isMid = s >= 2 && s <= 6;
-        return (
-          <motion.div
-            key={i}
-            style={{
-              border: "0.5px solid rgba(27,27,31,0.15)",
-              backgroundColor: isMid
-                ? pulse
-                  ? "var(--signal-warm)"
-                  : "rgba(194,70,31,0.22)"
-                : "transparent",
-            }}
-            animate={
-              isMid && pulse
-                ? { opacity: [0.4, 1, 0.55, 1, 0.4] }
-                : { opacity: 1 }
-            }
-            transition={
-              isMid && pulse
-                ? { duration: 1.0, ease: "easeInOut", delay: (u * 8 + v) * 0.008 }
-                : { duration: 0 }
-            }
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-const BITS = "10110010 11001011 01101100 10110010";
-
-function BitsSlide() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 16 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      style={{
-        position: "absolute",
-        bottom: 20,
-        left: 12,
-        right: 12,
-        backgroundColor: "rgba(27,27,31,0.82)",
-        padding: "8px 10px",
-        borderRadius: 2,
-      }}
-    >
-      <p
-        className="font-mono"
-        style={{ fontSize: 11, color: "var(--signal-warm)", letterSpacing: "0.08em" }}
-      >
-        {BITS}
-      </p>
-      <p className="font-mono" style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", marginTop: 3 }}>
-        signed ID
-      </p>
-    </motion.div>
-  );
-}
-
-function Shimmer() {
-  return (
-    <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.18, 0, 0.12, 0] }}
-        transition={{ duration: 1.6, times: [0, 0.2, 0.45, 0.7, 1] }}
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundColor: "var(--bg-elev)",
-          mixBlendMode: "overlay",
-          pointerEvents: "none",
-        }}
-      />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.6 }}
-        style={{
-          position: "absolute",
-          bottom: 12,
-          left: 10,
-          right: 10,
-          backgroundColor: "rgba(27,27,31,0.75)",
-          padding: "6px 8px",
-          borderRadius: 2,
-        }}
-      >
-        <p className="font-mono" style={{ fontSize: 9, color: "rgba(255,255,255,0.55)" }}>
-          re-encoded, cropped, re-uploaded
-        </p>
-      </motion.div>
-    </>
-  );
-}
-
-function VerdictChip() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      style={{
-        position: "absolute",
-        bottom: 20,
-        left: "50%",
-        transform: "translateX(-50%)",
-        backgroundColor: "rgba(42,157,143,0.12)",
-        border: "1px solid var(--accent-teal)",
-        padding: "6px 14px",
-        borderRadius: 2,
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span
-        className="font-mono"
-        style={{ fontSize: 11, color: "var(--accent-teal)", letterSpacing: "0.1em" }}
-      >
-        Verified: Exact
-      </span>
-    </motion.div>
-  );
-}
+const STAGES = [
+  { label: "Original", title: "A record starts with your media.", body: "An original asset enters the registration pipeline." },
+  { label: "Embed", title: "An identifier woven into the signal.", body: "OmniLock explores embedding an ID into mid-band DCT coefficients." },
+  { label: "Transform", title: "The file changes. The question stays.", body: "Re-encoding and cropping are attacks the research aims to withstand." },
+  { label: "Recover", title: "Recover the ID. Verify the record.", body: "The goal: connect a recovered identifier to a signed registration." },
+];
 
 export default function HeroEmbedLoop() {
-  const reduced = usePrefersReducedMotion();
-  const [beat, setBeat] = useState(reduced ? 3 : 0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (reduced) return;
-    timerRef.current = setTimeout(function tick() {
-      setBeat((b) => (b + 1) % TOTAL_BEATS);
-      timerRef.current = setTimeout(tick, BEAT_DURATION);
-    }, BEAT_DURATION);
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [reduced]);
+  const { stage, playing, reduced, togglePlaying } = usePreviewCycle(STAGES.length);
 
   return (
-    <div className="flex flex-col gap-3">
-      {/* Video frame */}
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "16/10",
-          backgroundColor: "var(--bg-elev)",
-          border: "1px solid var(--rule)",
-          borderRadius: 4,
-          overflow: "hidden",
-        }}
-      >
-        {/* Subtle gradient placeholder image */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(135deg, rgba(194,70,31,0.06) 0%, rgba(42,157,143,0.06) 100%)",
-          }}
-        />
-
-        {/* Beat 0: DCT grid fades in with mid-band pulse */}
-        <AnimatePresence>
-          {(beat === 0 || reduced === false) && (beat === 0 || beat === 3) ? (
-            <motion.div
-              key="dct"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              style={{ position: "absolute", inset: 0 }}
-            >
-              <DctGrid pulse={beat === 0} />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-
-        {/* Beat 1: bits slide */}
-        <AnimatePresence>
-          {beat === 1 && <BitsSlide key="bits" />}
-        </AnimatePresence>
-
-        {/* Beat 2: shimmer */}
-        <AnimatePresence>
-          {beat === 2 && (
-            <motion.div key="shimmer" style={{ position: "absolute", inset: 0 }}>
-              <Shimmer />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Beat 3: verdict chip */}
-        <AnimatePresence>
-          {beat === 3 && <VerdictChip key="verdict" />}
-        </AnimatePresence>
-
-        {/* Beat counter dots */}
-        <div
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            display: "flex",
-            gap: 4,
-          }}
-        >
-          {Array.from({ length: 4 }, (_, i) => (
-            <div
-              key={i}
-              style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                backgroundColor:
-                  i === beat
-                    ? "var(--signal-warm)"
-                    : "rgba(27,27,31,0.2)",
-                transition: "background-color 0.3s",
-              }}
-            />
-          ))}
+    <div>
+      <div className="provenance-stage" aria-hidden="true">
+        <div className="absolute top-5 left-5 right-5 flex justify-between font-mono text-label text-[#E9E0D6]">
+          <span>OMNI / SIGNAL STUDY</span><span>0{stage + 1} — 04</span>
+        </div>
+        <svg viewBox="0 0 480 300" className="w-full h-full" fill="none">
+          <defs>
+            <linearGradient id="signal-spectrum" x1="0" y1="0" x2="480" y2="300" gradientUnits="userSpaceOnUse"><stop stopColor="#F7BB87"/><stop offset="1" stopColor="#8CD8C1"/></linearGradient>
+          </defs>
+          {[70, 110, 150, 190, 230].map((y) => <path key={y} d={`M24 ${y}H456`} stroke="#FFFFFF" strokeOpacity="0.08" />)}
+          {Array.from({ length: 53 }, (_, i) => {
+            const envelope = Math.sin((i / 52) * Math.PI);
+            const height = 12 + envelope * (35 + Math.abs(Math.sin(i * 1.73)) * 106);
+            return <motion.rect key={i} x={29 + i * 8} y={150 - height / 2} width="3" rx="1.5" fill="url(#signal-spectrum)"
+              animate={{ height: stage === 2 ? height * 0.65 : height, y: 150 - (stage === 2 ? height * 0.65 : height) / 2, opacity: stage === 1 && i % 3 === 0 ? 0.35 : 1 }}
+              transition={{ duration: reduced ? 0 : 0.65, delay: reduced ? 0 : i * 0.004 }} />;
+          })}
+          {stage === 1 && <g stroke="#F7BB87" strokeWidth="1"><rect x="102" y="66" width="276" height="168" rx="6" strokeDasharray="4 5"/><path d="M92 150H388M240 56V244" strokeOpacity="0.3"/></g>}
+          {stage === 2 && <g stroke="#E9E0D6" strokeWidth="2"><path d="M112 92V72H132M348 72H368V92M112 208V228H132M348 228H368V208"/><rect x="113" y="73" width="254" height="154" strokeOpacity="0.2"/></g>}
+          {stage === 3 && <g><circle cx="240" cy="150" r="34" fill="#163B34" stroke="#8CD8C1"/><path d="m225 150 10 10 20-22" stroke="#8CD8C1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></g>}
+        </svg>
+        <div className="absolute bottom-5 left-5 right-5 flex justify-between gap-3 text-label font-mono text-[#E9E0D6]">
+          <span>{stage === 2 ? "TRANSFORMED SIGNAL" : stage === 3 ? "RECOVERY GOAL" : "MEDIA → IDENTITY"}</span><span>ILLUSTRATION</span>
         </div>
       </div>
-
-      <p
-        className="font-mono text-[11px] text-center"
-        style={{ color: "var(--ink-mute)" }}
-      >
-        The identifier survives what the internet does to media.
-      </p>
+      <div className="preview-controls" role="list" aria-label="Concept preview stages">
+        {STAGES.map((item, i) => <div key={item.label} role="listitem" aria-current={stage === i ? "step" : undefined} className="preview-step"><span className="font-mono text-label">0{i + 1}</span>{item.label}</div>)}
+      </div>
+      <div className="min-h-[130px] pt-5">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={stage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : 0.15 }}>
+            <p className="font-semibold text-body">{STAGES[stage].title}</p>
+            <p className="text-small text-[var(--ink-mute)] mt-2">{STAGES[stage].body}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="flex items-center justify-between gap-4 pt-4 border-t border-[var(--rule)]">
+        <Link href="/how-it-works#omnilock-embed" className="text-small font-semibold">Open interactive demo <span aria-hidden="true">↗</span></Link>
+        {!reduced && <button onClick={togglePlaying} className="preview-play text-small" aria-label={playing ? "Pause concept preview" : "Play concept preview"}>{playing ? "Pause Ⅱ" : "Play ▷"}</button>}
+      </div>
     </div>
   );
 }

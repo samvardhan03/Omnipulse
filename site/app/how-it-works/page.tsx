@@ -5,14 +5,15 @@ import TwoLayerSynthIdGrid from "@/components/TwoLayerSynthIdGrid";
 import ModularCommercializationGrid from "@/components/grid/ModularCommercializationGrid";
 import Eyebrow from "@/components/primitives/Eyebrow";
 import Link from "next/link";
+import PageHeader from "@/components/primitives/PageHeader";
 
 function Placeholder({ label }: { label: string }) {
   return (
     <div
-      className="max-w-[1280px] mx-auto px-6 py-12"
+      className="site-container py-section"
       style={{ borderBottom: "1px solid var(--rule)" }}
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--ink-mute)" }}>
+      <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
         Loading {label}...
       </p>
     </div>
@@ -60,16 +61,16 @@ function VerdictsSection() {
 
   return (
     <section style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6 py-16">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Verdicts</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             Three outcomes. One unambiguous number.
           </h2>
-          <p className="text-[17px] leading-[1.6] max-w-[640px]" style={{ color: "var(--ink-mute)" }}>
+          <p className="text-body max-w-[640px]" style={{ color: "var(--ink-mute)" }}>
             Every comparison returns one of three verdicts. The thresholds below are
             provisional: they will be recalibrated on real-world data before the platform
             exits private beta.
@@ -83,16 +84,16 @@ function VerdictsSection() {
           {verdicts.map((v) => (
             <div
               key={v.label}
-              className="p-8 flex flex-col gap-4"
+              className="p-card flex flex-col gap-4"
               style={{ borderRight: "1px solid var(--rule)", backgroundColor: "var(--bg)" }}
             >
               <h3
-                className="font-serif font-light text-[22px]"
+                className="font-display font-medium text-card-title"
                 style={{ color: "var(--ink)" }}
               >
                 {v.label}
               </h3>
-              <p className="text-[15px] leading-[1.65]" style={{ color: "var(--ink-mute)" }}>
+              <p className="text-body" style={{ color: "var(--ink-mute)" }}>
                 {v.description}
               </p>
             </div>
@@ -100,7 +101,7 @@ function VerdictsSection() {
         </div>
 
         <p
-          className="mt-6 font-mono text-[12px] leading-[1.6]"
+          className="mt-6 font-mono text-code"
           style={{ color: "var(--ink-mute)" }}
         >
           Threshold note: Exact and Perceptual thresholds are set conservatively and have not
@@ -121,16 +122,16 @@ function AttestationsSection() {
 
   return (
     <section style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6 py-16">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Signed attestations</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             Ed25519. Three public fields. No account required.
           </h2>
-          <p className="text-[17px] leading-[1.6] max-w-[640px]" style={{ color: "var(--ink-mute)" }}>
+          <p className="text-body max-w-[640px]" style={{ color: "var(--ink-mute)" }}>
             Every match verdict is accompanied by a signed attestation. The signature is
             verifiable by anyone who holds the three public fields below, with no call back
             to OmniPulse and no account. The signing key is the organization&apos;s own key,
@@ -142,16 +143,16 @@ function AttestationsSection() {
           {fields.map((f) => (
             <div
               key={f.label}
-              className="border p-6 flex flex-col gap-3"
+              className="surface-card p-card flex flex-col gap-3"
               style={{ borderColor: "var(--rule)" }}
             >
               <code
-                className="font-mono text-[14px]"
+                className="font-mono text-code"
                 style={{ color: "var(--ink)" }}
               >
                 {f.label}
               </code>
-              <p className="text-[14px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+              <p className="text-body" style={{ color: "var(--ink-mute)" }}>
                 {f.description}
               </p>
             </div>
@@ -161,28 +162,28 @@ function AttestationsSection() {
         <div className="mt-8 flex flex-wrap gap-4">
           <Link
             href="/tiers/enterprise"
-            className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+            className="font-sans text-label uppercase tracking-label transition-opacity hover:opacity-60"
             style={{ color: "var(--ink-mute)" }}
           >
             Enterprise tier
           </Link>
           <Link
             href="/tiers/phase-1-dsp"
-            className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+            className="font-sans text-label uppercase tracking-label transition-opacity hover:opacity-60"
             style={{ color: "var(--ink-mute)" }}
           >
             Phase I: DSP
           </Link>
           <Link
             href="/tiers/phase-2-vector"
-            className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+            className="font-sans text-label uppercase tracking-label transition-opacity hover:opacity-60"
             style={{ color: "var(--ink-mute)" }}
           >
             Phase II: Vector
           </Link>
           <Link
             href="/tiers/phase-3-agent"
-            className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+            className="font-sans text-label uppercase tracking-label transition-opacity hover:opacity-60"
             style={{ color: "var(--ink-mute)" }}
           >
             Phase III: Agent
@@ -198,24 +199,12 @@ export default function HowItWorksPage() {
     <>
       <Navbar />
       <main id="main-content" className="pt-[64px]">
-        <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-8">
-          <Eyebrow>Technical walkthrough</Eyebrow>
-          <h1
-            className="font-serif font-light mt-4 leading-[1.04] tracking-[-0.02em]"
-            style={{ fontSize: "clamp(36px,4.8vw,72px)", color: "var(--ink)" }}
-          >
-            How OmniPulse works.
-          </h1>
-          <p
-            className="mt-4 text-[18px] leading-[1.6] max-w-[640px]"
-            style={{ color: "var(--ink-mute)" }}
-          >
-            Two engines, one registry, one signed token. This page walks through
-            the full pipeline: from the passive scattering fingerprint to the active
-            OmniLock watermark, through verdicts and signed attestations, to the four
-            deployment tiers.
-          </p>
-        </div>
+        <PageHeader eyebrow="Technical walkthrough" title="How OmniPulse works." description="Two engines, one registry, one signed token. This page walks through the full pipeline: from the passive scattering fingerprint to the active OmniLock watermark, through verdicts and signed attestations, to the four deployment tiers.">
+          <div className="flex flex-wrap gap-3">
+            <Link className="ui-button border border-[var(--rule)]" href="#omnilock-embed">Try OmniLock ↗</Link>
+            <Link className="ui-button border border-[var(--rule)]" href="#simulator">Explore the pipeline ↗</Link>
+          </div>
+        </PageHeader>
 
         {/*
           Section order rationale:
