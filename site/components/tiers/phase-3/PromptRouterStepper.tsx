@@ -45,7 +45,7 @@ export default function PromptRouterStepper() {
     <div className="flex flex-col gap-6">
       {/* Prompt bar */}
       <div
-        className="border p-4 font-mono text-[13px]"
+        className="border p-4 font-mono text-code"
         style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink)" }}
       >
         <span style={{ color: "var(--ink-mute)" }}>Operator prompt: </span>
@@ -64,7 +64,7 @@ export default function PromptRouterStepper() {
               }}
             />
             <span
-              className="font-mono text-[11px] uppercase tracking-[0.1em]"
+              className="font-sans text-label uppercase tracking-[0.1em]"
               style={{ color: state.step >= i ? "var(--ink)" : "var(--ink-mute)" }}
             >
               {label}
@@ -81,13 +81,13 @@ export default function PromptRouterStepper() {
         {/* Pane 1 — Claude */}
         <div className="flex flex-col gap-2">
           <p
-            className="font-mono text-[11px] uppercase tracking-[0.14em]"
+            className="font-sans text-label uppercase tracking-label"
             style={{ color: "var(--ink-mute)" }}
           >
             Pane 1: Anthropic Claude
           </p>
           <div
-            className="border p-4 font-mono text-[12px] min-h-[100px]"
+            className="border p-4 font-mono text-code min-h-[100px]"
             style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink)" }}
           >
             <AnimatePresence mode="wait">
@@ -118,13 +118,13 @@ export default function PromptRouterStepper() {
         {/* Pane 2: JSON-RPC bus */}
         <div className="flex flex-col gap-2">
           <p
-            className="font-mono text-[11px] uppercase tracking-[0.14em]"
+            className="font-sans text-label uppercase tracking-label"
             style={{ color: "var(--ink-mute)" }}
           >
             Pane 2: JSON-RPC bus
           </p>
           <div
-            className="border p-4 font-mono text-[12px] min-h-[120px] overflow-auto relative"
+            className="border p-4 font-mono text-code min-h-[120px] overflow-auto relative"
             style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)", color: "var(--ink)" }}
           >
             <AnimatePresence mode="wait">
@@ -146,7 +146,7 @@ export default function PromptRouterStepper() {
                       +{activeFrame.latency_ms}ms
                     </span>
                   </div>
-                  <pre className="text-[11px] overflow-auto max-h-[120px]">
+                  <pre className="text-small overflow-auto max-h-[120px]">
                     {JSON.stringify(activeFrame.payload, null, 2)}
                   </pre>
                 </motion.div>
@@ -160,13 +160,13 @@ export default function PromptRouterStepper() {
         {/* Pane 3: Rust + GPU kernel */}
         <div className="flex flex-col gap-2">
           <p
-            className="font-mono text-[11px] uppercase tracking-[0.14em]"
+            className="font-sans text-label uppercase tracking-label"
             style={{ color: "var(--ink-mute)" }}
           >
             Pane 3: Rust + GPU kernel
           </p>
           <div
-            className="border p-4 font-mono text-[12px] min-h-[80px]"
+            className="border p-4 font-mono text-code min-h-[80px]"
             style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
           >
             <div className="flex flex-col gap-1">
@@ -190,7 +190,7 @@ export default function PromptRouterStepper() {
         {state.step < 4 && (
           <button
             onClick={() => dispatch({ type: "ADVANCE" })}
-            className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+            className="ui-button font-sans border"
             style={{ borderColor: PASTEL_VIOLET, color: PASTEL_VIOLET }}
           >
             {state.step === 0 ? "Run pipeline →" : "Next step →"}
@@ -198,14 +198,14 @@ export default function PromptRouterStepper() {
         )}
         <button
           onClick={() => dispatch({ type: "RESET" })}
-          className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+          className="ui-button font-sans border"
           style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
         >
           Reset
         </button>
 
         {state.step >= 4 && (
-          <p className="font-mono text-[12px]" style={{ color: "var(--ink-mute)" }}>
+          <p className="font-mono text-code" style={{ color: "var(--ink-mute)" }}>
             LLM {trace.wall_clock.llm_s}s · stdio {trace.wall_clock.stdio_ms}ms · kernel {trace.wall_clock.kernel_ms}ms · index {trace.wall_clock.index_ms}ms
           </p>
         )}

@@ -1,85 +1,35 @@
 import Link from "next/link";
-import { STATUS, STATE_LABELS, STATE_ORDER, STATE_COLORS } from "@/content/status";
+import { STATUS, STATUS_COUNTS, LAST_REVIEWED } from "@/content/status";
+import StatusBadge from "@/components/primitives/StatusBadge";
+import Eyebrow from "@/components/primitives/Eyebrow";
 
 export default function ProgressStrip() {
-  const counts = STATE_ORDER.map((state) => ({
-    state,
-    label: STATE_LABELS[state],
-    count: STATUS.filter((s) => s.state === state).length,
-  }));
-
-  const builtItems = STATUS.filter((s) => s.state === "built-and-tested");
-
+  const builtItems = STATUS.filter((entry) => entry.state === "built-and-tested");
   return (
-    <section style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row md:items-start gap-8">
-          <div className="flex flex-col gap-2 md:w-48 shrink-0">
-            <p
-              className="font-mono text-[11px] uppercase tracking-[0.16em]"
-              style={{ color: "var(--ink-mute)" }}
-            >
-              Platform status
-            </p>
-            <p className="font-mono text-[11px]" style={{ color: "var(--ink-mute)" }}>
-              Private beta
-            </p>
-            <div className="flex flex-wrap md:flex-col gap-3 mt-2">
-              {counts.map(({ state, label, count }) => (
-                <div key={state} className="flex items-center gap-2">
-                  <div
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: STATE_COLORS[state] }}
-                  />
-                  <span className="font-mono text-[11px]" style={{ color: "var(--ink-mute)" }}>
-                    {count} {label.toLowerCase()}
-                  </span>
-                </div>
-              ))}
-            </div>
+    <section className="build-section">
+      <div className="site-container grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-20">
+        <div>
+          <Eyebrow>From the workbench</Eyebrow>
+          <h2 className="font-display font-medium text-section mt-5">Working code.<br />An open roadmap.</h2>
+          <p className="text-body text-[var(--ink-mute)] mt-5 max-w-[440px]">Audio and image fingerprinting, isolated catalogues, and signed attestations are built and tested. Here’s where the rest stands.</p>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-6 mt-8">
+            {STATUS_COUNTS.map(({ state, count }) => <div key={state}>
+              <p className="font-mono text-3xl mb-2">{String(count).padStart(2, "0")}</p>
+              <StatusBadge state={state} />
+            </div>)}
           </div>
-
-          <div className="flex-1">
-            <p
-              className="font-mono text-[11px] uppercase tracking-[0.16em] mb-4"
-              style={{ color: "var(--ink-mute)" }}
-            >
-              Built and tested
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {builtItems.map((entry) => (
-                <div key={entry.item} className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-1.5 h-1.5 rounded-full shrink-0"
-                      style={{ backgroundColor: STATE_COLORS["built-and-tested"] }}
-                    />
-                    <p className="text-[13px] leading-[1.5]" style={{ color: "var(--ink)" }}>
-                      {entry.item}
-                    </p>
-                  </div>
-                  {entry.note && (
-                    <p
-                      className="font-mono text-[11px] leading-[1.5] pl-4"
-                      style={{ color: "var(--ink-mute)" }}
-                    >
-                      {entry.note}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <Link href="/progress" className="ui-button border border-[var(--ink)] mt-8">Explore the build board <span aria-hidden="true">↗</span></Link>
         </div>
-
-        <div className="mt-6 pt-4 border-t" style={{ borderColor: "var(--rule)" }}>
-          <Link
-            href="/progress"
-            className="font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
-            style={{ color: "var(--ink-mute)" }}
-          >
-            Full progress page
-          </Link>
+        <div className="build-log">
+          <div className="flex flex-wrap justify-between gap-3 border-b border-[var(--rule)] pb-4 text-label font-mono text-[var(--ink-mute)]"><span>BUILT & TESTED / {builtItems.length} CAPABILITIES</span><time dateTime={LAST_REVIEWED}>{LAST_REVIEWED}</time></div>
+          <ul>
+            {builtItems.map((entry) => <li key={entry.item} className="py-5 border-b border-[var(--rule)] last:border-0">
+              <div className="flex gap-4">
+                <span aria-hidden="true" className="text-[var(--accent-teal)]">✓</span>
+                <div><p className="text-label uppercase tracking-label font-semibold text-[var(--ink-mute)] mb-1">{entry.area}</p><p className="text-small">{entry.item}</p>{entry.note && <p className="text-small mt-2 text-[var(--ink-mute)]">{entry.note}</p>}</div>
+              </div>
+            </li>)}
+          </ul>
         </div>
       </div>
     </section>

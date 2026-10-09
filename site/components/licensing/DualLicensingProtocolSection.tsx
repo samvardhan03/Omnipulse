@@ -18,28 +18,28 @@ const rows = [
 export default function DualLicensingProtocolSection() {
   return (
     <section id="licensing" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Dual licensing protocol</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             AGPL-3.0 + Commercial vs Enterprise
           </h2>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse font-mono">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--rule)" }}>
-                <th className="text-left py-3 pr-8 font-mono text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)", width: "40%" }}>
+                <th className="text-left py-3 pr-8 font-mono text-label uppercase tracking-label" style={{ color: "var(--ink-mute)", width: "40%" }}>
                   Capability
                 </th>
-                <th className="text-left py-3 px-4 font-mono text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--ink)" }}>
+                <th className="text-left py-3 px-4 font-mono text-label uppercase tracking-label" style={{ color: "var(--ink)" }}>
                   AGPL-3.0 + Commercial
                 </th>
-                <th className="text-left py-3 pl-8 font-mono text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--accent)" }}>
+                <th className="text-left py-3 pl-8 font-mono text-label uppercase tracking-label" style={{ color: "var(--accent)" }}>
                   Commercial Enterprise
                 </th>
               </tr>
@@ -47,11 +47,11 @@ export default function DualLicensingProtocolSection() {
             <tbody>
               {rows.map((row, i) => (
                 <tr key={i} style={{ borderBottom: "1px solid var(--rule)" }}>
-                  <td className="py-4 pr-8 text-[15px]" style={{ color: "var(--ink-mute)" }}>
+                  <td className="py-4 pr-8 text-body" style={{ color: "var(--ink-mute)" }}>
                     {row.label}
                   </td>
                   <td
-                    className="py-4 px-4 font-mono text-[13px]"
+                    className="py-4 px-4 font-mono text-code"
                     style={{
                       color:
                         row.oss.startsWith("yes")
@@ -64,7 +64,7 @@ export default function DualLicensingProtocolSection() {
                     {row.oss}
                   </td>
                   <td
-                    className="py-4 pl-8 font-mono text-[13px]"
+                    className="py-4 pl-8 font-mono text-code"
                     style={{ color: "var(--ink)" }}
                   >
                     {row.commercial}
@@ -76,15 +76,15 @@ export default function DualLicensingProtocolSection() {
         </div>
 
         <div className="mt-10 flex flex-col gap-2 max-w-[640px]">
-          <p className="text-[15px] leading-[1.6]" style={{ color: "var(--ink-mute)" }}>
+          <p className="text-body" style={{ color: "var(--ink-mute)" }}>
             Every Rust crate and Python module in this workspace is published
-            under the <code className="font-mono text-[13px]">AGPL-3.0-or-later</code>{" "}
+            under the <code className="font-mono text-code">AGPL-3.0-or-later</code>{" "}
             SPDX identifier (see{" "}
             <a href="https://github.com/samvardhan03/Omnipulse/blob/main/LICENSING.md" className="transition-opacity hover:opacity-60" style={{ color: "var(--ink)" }}>LICENSING.md</a>). Commercial
             enterprise agreements unlock production SLAs, managed infrastructure,
             and indemnification.
           </p>
-          <p className="text-[15px]" style={{ color: "var(--ink-mute)" }}>
+          <p className="text-body" style={{ color: "var(--ink-mute)" }}>
             Commercial inquiries:{" "}
             <a
               href="mailto:shekhawatsamvardhan@gmail.com"

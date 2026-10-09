@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
+import IdentifierPreviewSection from "@/components/IdentifierPreviewSection";
 import HeroSection from "@/components/hero/HeroSection";
 import ProblemTicker from "@/components/ProblemTicker";
 import HowItIsUsed from "@/components/HowItIsUsed";
@@ -23,6 +24,7 @@ export default function Home() {
       <main id="main-content">
         <HeroSection />
         <ProblemTicker />
+        <IdentifierPreviewSection />
         <HowItIsUsed />
         <ProgressStrip />
         <EnterprisePricing />

@@ -111,3 +111,11 @@ export const STATE_COLORS: Record<ItemState, string> = {
   research: "var(--ink-mute)",
   planned: "var(--rule)",
 };
+
+export const STATUS_COUNTS = STATE_ORDER.map((state) => ({
+  state,
+  count: STATUS.filter((entry) => entry.state === state).length,
+}));
+
+export const LAST_REVIEWED = STATUS.reduce((latest, entry) =>
+  entry.asOf > latest ? entry.asOf : latest, "");

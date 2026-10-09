@@ -15,6 +15,7 @@
 # Node / Next.js
 site/node_modules/
 site/.next/
+site/.next-dev/
 site/out/
 site/.env*.local
 

@@ -27,13 +27,13 @@ export default function PackageBadge({ command, className }: PackageBadgeProps) 
       style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
     >
       <code
-        className="font-mono text-[13px]"
+        className="font-mono text-code"
         style={{ color: "var(--ink)" }}
       >
         {command}
       </code>
       <span
-        className="font-mono text-[11px] uppercase tracking-[0.1em] ml-auto shrink-0"
+        className="font-sans text-label uppercase tracking-[0.1em] ml-auto shrink-0"
         style={{ color: "var(--ink-mute)" }}
       >
         {copied ? "copied" : "copy"}

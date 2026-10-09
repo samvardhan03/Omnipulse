@@ -62,11 +62,11 @@ function MeterBar({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[11px]" style={{ color: "var(--ink-mute)" }}>
+        <span className="font-mono text-code" style={{ color: "var(--ink-mute)" }}>
           {label}
         </span>
         <span
-          className="font-mono text-[11px]"
+          className="font-mono text-code"
           style={{ color: failed ? "var(--signal-warm)" : color }}
         >
           {failed ? "fail" : `${Math.round(pct * 100)}%`}
@@ -77,7 +77,7 @@ function MeterBar({
         style={{ backgroundColor: "var(--rule)" }}
       >
         <div
-          className="h-full rounded-full transition-all duration-500"
+          className="h-full rounded-full transition-[width] duration-500"
           style={{
             width: `${pct * 100}%`,
             backgroundColor: failed ? "var(--signal-warm)" : color,
@@ -118,7 +118,7 @@ export default function TwoLayerAttackToggle() {
   return (
     <div className="flex flex-col gap-4">
       <p
-        className="font-mono text-[11px] uppercase tracking-[0.14em]"
+        className="font-sans text-label uppercase tracking-label"
         style={{ color: "var(--accent-teal)" }}
       >
         Attack survivability
@@ -130,7 +130,7 @@ export default function TwoLayerAttackToggle() {
             key={a.id}
             onClick={() => toggle(a.id)}
             aria-pressed={active.has(a.id)}
-            className="font-mono text-[11px] uppercase tracking-[0.1em] px-3 py-1.5 border transition-all"
+            className="ui-button font-sans border"
             style={{
               borderColor: active.has(a.id) ? "var(--ink)" : "var(--rule)",
               backgroundColor: active.has(a.id) ? "var(--ink)" : "transparent",
@@ -156,14 +156,14 @@ export default function TwoLayerAttackToggle() {
         />
         {phaseActive && (
           <div
-            className="text-[12px] leading-[1.5] p-3 border"
+            className="text-small p-3 border"
             style={{
               borderColor: "var(--signal-warm)",
               color: "var(--ink-mute)",
               backgroundColor: "rgba(194,70,31,0.05)",
             }}
           >
-            <span style={{ color: "var(--signal-warm)" }} className="font-mono text-[11px] uppercase tracking-[0.1em]">
+            <span style={{ color: "var(--signal-warm)" }} className="font-sans text-label uppercase tracking-[0.1em]">
               Note:
             </span>{" "}
             {phaseAttack.note}
@@ -172,7 +172,7 @@ export default function TwoLayerAttackToggle() {
       </div>
 
       <p
-        className="font-mono text-[11px]"
+        className="font-mono text-code"
         style={{ color: "var(--ink-mute)", borderTop: "1px solid var(--rule)", paddingTop: 8 }}
       >
         Illustrative demo, not a live benchmark.

@@ -4,19 +4,19 @@ import { motion } from "framer-motion";
 
 export default function RustLane({ active }: { active: boolean }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 font-medium">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+        <span className="font-sans font-semibold text-label uppercase tracking-label" style={{ color: "var(--ink)" }}>
           Rust orchestrator
         </span>
       </div>
       <motion.div
-        className="p-4 border font-mono text-[12px]"
-        style={{ borderColor: "var(--rule)", backgroundColor: "var(--bg-elev)" }}
-        animate={{ opacity: active ? 1 : 0.4 }}
+        className="code-panel p-4 border font-mono text-code"
+        style={{ borderColor: "var(--panel-rule)", backgroundColor: "var(--bg-elev)" }}
+        animate={{ borderColor: active ? "var(--signal-warm)" : "var(--panel-rule)" }}
         transition={{ duration: 0.3 }}
       >
-        <span style={{ color: "var(--ink-mute)" }}>{"// server.rs:162-211 - generate_fingerprint handler"}</span>
+        <span style={{ color: "var(--ink)" }}>{"// server.rs:162-211 - generate_fingerprint handler"}</span>
         {"\n"}
         <span style={{ color: "var(--accent)" }}>{"let signal"}</span>
         <span style={{ color: "var(--ink)" }}>{" = shm::read_and_unlink(&req.media_shm_name, n * 4)?;"}</span>

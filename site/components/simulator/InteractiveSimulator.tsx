@@ -122,16 +122,16 @@ python -m omnipulse_agent.run --wav your.wav`;
 
   return (
     <section id="simulator" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="site-container">
         <div className="mb-8 flex flex-col gap-3">
           <Eyebrow>Interactive simulator</Eyebrow>
           <h2
-            className="font-serif font-light"
-            style={{ fontSize: "clamp(28px,3.6vw,52px)", color: "var(--ink)" }}
+            className="font-display font-medium text-section"
+            style={{ color: "var(--ink)" }}
           >
             The fingerprint pipeline, step by step
           </h2>
-          <p style={{ color: "var(--ink-mute)", fontSize: 16, maxWidth: 560 }}>
+          <p className="text-body max-w-[560px]" style={{ color: "var(--ink-mute)" }}>
             Drop a WAV file. Step through each swimlane. Every value is
             deterministically computed from your input, no server calls.
           </p>
@@ -153,7 +153,7 @@ python -m omnipulse_agent.run --wav your.wav`;
                   }}
                 />
                 <span
-                  className="font-mono text-[11px] uppercase tracking-[0.1em] whitespace-nowrap"
+                  className="font-sans text-label uppercase tracking-[0.1em] whitespace-nowrap"
                   style={{ color: STEP_ORDER.indexOf(state.step) >= i ? "var(--ink)" : "var(--ink-mute)" }}
                 >
                   {STEP_LABELS[s]}
@@ -167,7 +167,7 @@ python -m omnipulse_agent.run --wav your.wav`;
             {/* Upload zone */}
             {state.step === "idle" && (
               <label
-                className="flex flex-col items-center justify-center p-12 border-2 border-dashed cursor-pointer transition-opacity hover:opacity-70"
+                className="flex flex-col items-center justify-center p-12 upload-zone border-2 border-dashed cursor-pointer"
                 style={{ borderColor: "var(--rule)" }}
               >
                 <input
@@ -176,10 +176,10 @@ python -m omnipulse_agent.run --wav your.wav`;
                   className="sr-only"
                   onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                 />
-                <span className="font-mono text-[13px]" style={{ color: "var(--ink-mute)" }}>
+                <span className="font-sans text-small" style={{ color: "var(--ink-mute)" }}>
                   Drop or click to upload a WAV file
                 </span>
-                <span className="font-mono text-[11px] mt-1" style={{ color: "var(--ink-mute)" }}>
+                <span className="font-sans text-small mt-1" style={{ color: "var(--ink-mute)" }}>
                   Decoded in-browser via AudioContext · no upload
                 </span>
               </label>
@@ -201,7 +201,7 @@ python -m omnipulse_agent.run --wav your.wav`;
               {state.step !== "idle" && state.step !== "completed" && (
                 <button
                   onClick={() => dispatch({ type: "ADVANCE" })}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
                 >
                   Next step →
@@ -210,7 +210,7 @@ python -m omnipulse_agent.run --wav your.wav`;
               {state.step !== "idle" && (
                 <button
                   onClick={() => dispatch({ type: "RESET" })}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
                 >
                   Reset
@@ -219,7 +219,7 @@ python -m omnipulse_agent.run --wav your.wav`;
               {state.step === "completed" && (
                 <button
                   onClick={() => navigator.clipboard.writeText(clipboardCmd)}
-                  className="font-mono text-[12px] uppercase tracking-[0.12em] px-5 py-2 border transition-opacity hover:opacity-70"
+                  className="ui-button font-sans border"
                   style={{ borderColor: "var(--rule)", color: "var(--ink-mute)" }}
                 >
                   Copy &quot;run locally&quot; CLI
@@ -230,12 +230,12 @@ python -m omnipulse_agent.run --wav your.wav`;
 
           {/* Right rail: config */}
           <div className="col-span-12 md:col-span-3 flex flex-col gap-4">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--ink-mute)" }}>
+            <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
               WstConfig
             </p>
             {(["j", "q"] as const).map((key) => (
               <div key={key} className="flex flex-col gap-1">
-                <label className="font-mono text-[12px] uppercase" style={{ color: "var(--ink-mute)" }}>
+                <label className="font-sans text-label uppercase" style={{ color: "var(--ink-mute)" }}>
                   {key.toUpperCase()} = {state.config[key]}
                 </label>
                 <input
@@ -261,7 +261,7 @@ python -m omnipulse_agent.run --wav your.wav`;
                 }
                 className="accent-[var(--accent)]"
               />
-              <label htmlFor="jtfs" className="font-mono text-[12px]" style={{ color: "var(--ink)" }}>
+              <label htmlFor="jtfs" className="font-sans text-code" style={{ color: "var(--ink)" }}>
                 JTFS
               </label>
             </div>
@@ -269,11 +269,11 @@ python -m omnipulse_agent.run --wav your.wav`;
             <HairlineRule className="mt-2" />
 
             <div className="flex flex-col gap-1">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--ink-mute)" }}>
+              <p className="font-sans text-label uppercase tracking-label" style={{ color: "var(--ink-mute)" }}>
                 Kernel
               </p>
               <p
-                className="font-mono text-[12px]"
+                className="font-mono text-code"
                 style={{ color: state.useGpu ? "var(--accent)" : "var(--ink)" }}
               >
                 {state.useGpu ? "CUDA Hopper" : "CPU Morlet (Radix-2 FFT)"}

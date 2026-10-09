@@ -1,24 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Manrope, IBM_Plex_Mono } from "next/font/google";
+import { NavigationTransitionProvider } from "@/components/NavigationTransition";
 import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-manrope",
   display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-source-serif",
+  variable: "--font-space-grotesk",
   display: "swap",
-  weight: ["300", "400"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains",
+  variable: "--font-ibm-plex-mono",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -53,13 +54,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       data-theme="light"
-      className={`${inter.variable} ${sourceSerif.variable} ${jetbrainsMono.variable}`}
+      className={`${manrope.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
     >
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider><NavigationTransitionProvider>{children}</NavigationTransitionProvider></MotionProvider>
       </body>
     </html>
   );
